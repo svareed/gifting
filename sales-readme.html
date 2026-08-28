@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #fff; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>The Anatolia Close</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,400;0,500;0,600;1,6..72,400&family=Karla:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --ground:#F5F6F8;
+    --raised:#FFFFFF;
+    --ink:#131A26;
+    --ink-2:#4A5568;
+    --ink-3:#7C8798;
+    --rule:#DCE0E7;
+    --rule-soft:#E9ECF1;
+    --cobalt:#1E4C9A;
+    --cobalt-soft:#E4EBF7;
+    --coral:#B8452F;
+    --coral-soft:#F7E7E3;
+    --brass:#9A7C36;
+    --shadow:0 1px 2px rgba(19,26,38,.05), 0 12px 28px -20px rgba(19,26,38,.35);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#0E1219;
+      --raised:#161C26;
+      --ink:#E8EBF0;
+      --ink-2:#A3ADBD;
+      --ink-3:#727E90;
+      --rule:#28303D;
+      --rule-soft:#1F2733;
+      --cobalt:#7FA8E8;
+      --cobalt-soft:#1A2740;
+      --coral:#E08A72;
+      --coral-soft:#2E1E1A;
+      --brass:#C4A45C;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 30px -20px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0E1219;
+    --raised:#161C26;
+    --ink:#E8EBF0;
+    --ink-2:#A3ADBD;
+    --ink-3:#727E90;
+    --rule:#28303D;
+    --rule-soft:#1F2733;
+    --cobalt:#7FA8E8;
+    --cobalt-soft:#1A2740;
+    --coral:#E08A72;
+    --coral-soft:#2E1E1A;
+    --brass:#C4A45C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 30px -20px rgba(0,0,0,.8);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:Karla, "Helvetica Neue", Arial, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:62rem;margin:0 auto;padding:3.5rem 1.5rem 6rem}
+
+  .mast{border-bottom:1px solid var(--rule);padding-bottom:2rem;display:flex;flex-direction:column;gap:1rem}
+  .kicker{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cobalt);
+  }
+  h1{
+    font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6vw,3.9rem);
+    line-height:1.02;letter-spacing:-.02em;margin:0;text-wrap:balance;
+  }
+  .standfirst{
+    font-family:Newsreader,Georgia,serif;font-size:1.2rem;line-height:1.55;color:var(--ink-2);
+    max-width:34em;margin:0;
+  }
+
+  section{margin-top:4rem}
+  h2{
+    font-family:Newsreader,Georgia,serif;font-weight:500;font-size:1.75rem;line-height:1.15;
+    letter-spacing:-.01em;margin:0 0 .35rem;text-wrap:balance;
+  }
+  .sublede{color:var(--ink-3);font-size:.95rem;margin:0 0 1.75rem;max-width:42em}
+  p{max-width:38em}
+  code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em;background:var(--rule-soft);padding:.1em .35em;border-radius:2px}
+
+  .persona{
+    background:var(--raised);border:1px solid var(--rule);border-radius:3px;
+    box-shadow:var(--shadow);
+  }
+  .persona-head{
+    padding:1.6rem 1.75rem;border-bottom:1px solid var(--rule-soft);
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem 1rem;
+  }
+  .persona-name{font-family:Newsreader,Georgia,serif;font-size:1.6rem;line-height:1.1}
+  .persona-role{color:var(--ink-3);font-size:.9rem}
+  .persona-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));margin:0}
+  .fact{padding:1.1rem 1.75rem;border-top:1px solid var(--rule-soft);border-right:1px solid var(--rule-soft)}
+  .fact dt{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-3);margin-bottom:.3rem;
+  }
+  .fact dd{margin:0;font-size:.95rem;line-height:1.45}
+  .fact strong{font-weight:700}
+
+  .ledger-scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--raised);box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;min-width:34rem}
+  th,td{padding:.75rem 1.25rem;text-align:left;border-bottom:1px solid var(--rule-soft);font-size:.94rem}
+  thead th{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.65rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-3);font-weight:500;
+  }
+  td.num, th.num{text-align:right;font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+  tr.total td{border-top:2px solid var(--ink);font-weight:700;background:var(--cobalt-soft)}
+  tr.cost td{color:var(--ink-2)}
+  .verdict{
+    margin-top:1.25rem;padding:1.1rem 1.4rem;background:var(--coral-soft);
+    border-left:3px solid var(--coral);border-radius:0 3px 3px 0;
+  }
+  .verdict strong{font-family:Newsreader,Georgia,serif;font-size:1.35rem;font-weight:600;display:block;margin-bottom:.15rem}
+  .verdict p{max-width:44em;margin:0}
+
+  .beat{
+    display:grid;grid-template-columns:5.5rem 1fr 15rem;gap:0 1.75rem;
+    padding:1.75rem 0;border-top:1px solid var(--rule);align-items:start;
+  }
+  .beat:first-of-type{border-top:2px solid var(--ink)}
+  .clock{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;letter-spacing:.06em;
+    color:var(--cobalt);padding-top:.45rem;white-space:nowrap;
+  }
+  .say{font-family:Newsreader,Georgia,serif;font-size:1.18rem;line-height:1.5;margin:0;max-width:30em}
+  .say em{font-style:italic;color:var(--ink-2)}
+  .de{
+    margin:.55rem 0 0;max-width:30em;font-size:.88rem;line-height:1.5;color:var(--ink-2);
+    border-left:2px solid var(--brass);padding-left:.75rem;
+  }
+  .de::before{
+    content:"Auf Deutsch";display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin-bottom:.2rem;
+  }
+  .stage{color:var(--ink-3);font-size:.9rem;margin:.7rem 0 0;font-style:italic;max-width:34em}
+  .why{border-left:2px solid var(--rule);padding-left:1rem}
+  .why-label{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.62rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--brass);display:block;margin-bottom:.3rem;
+  }
+  .why p{font-size:.86rem;line-height:1.5;color:var(--ink-2);margin:0;max-width:none}
+  @media (max-width:860px){
+    .beat{grid-template-columns:4.5rem 1fr;gap:0 1rem}
+    .why{grid-column:2;margin-top:1rem}
+  }
+
+  .obj{border:1px solid var(--rule);border-radius:3px;background:var(--raised);box-shadow:var(--shadow);overflow:hidden}
+  .obj-row{display:grid;grid-template-columns:17rem 1fr;border-top:1px solid var(--rule-soft)}
+  .obj-row:first-child{border-top:none}
+  .obj-q{padding:1.15rem 1.4rem;background:var(--rule-soft);font-weight:700;font-size:.95rem}
+  .obj-q small{display:block;font-weight:400;font-size:.82rem;color:var(--ink-3);margin-top:.2rem;font-style:italic}
+  .obj-a{padding:1.15rem 1.4rem;font-size:.95rem}
+  .obj-a p{margin:0;max-width:none}
+  @media (max-width:720px){ .obj-row{grid-template-columns:1fr} .obj-q{padding-bottom:.6rem} }
+
+  .tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1rem}
+  .tier{background:var(--raised);border:1px solid var(--rule);border-radius:3px;padding:1.4rem;display:flex;flex-direction:column;gap:.5rem}
+  .tier.pick{border-color:var(--cobalt);box-shadow:var(--shadow)}
+  .tier-name{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .tier.pick .tier-name{color:var(--cobalt)}
+  .tier-price{font-family:Newsreader,Georgia,serif;font-size:2.1rem;line-height:1;font-variant-numeric:tabular-nums}
+  .tier-price span{font-size:.85rem;font-family:Karla,sans-serif;color:var(--ink-3)}
+  .tier ul{margin:.4rem 0 0;padding-left:1.05rem;font-size:.88rem;color:var(--ink-2);line-height:1.5}
+  .tier li{margin-bottom:.25rem}
+  .note{margin-top:1.25rem;color:var(--ink-2);font-size:.92rem;max-width:44em}
+
+  .checks{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}
+  .checks li{display:grid;grid-template-columns:auto 1fr;gap:.75rem;align-items:start;font-size:.95rem;max-width:46em}
+  .checks li::before{
+    content:"";width:.6rem;height:.6rem;margin-top:.45rem;border:1.5px solid var(--cobalt);border-radius:1px;
+  }
+  .checks b{font-weight:700}
+
+  footer{margin-top:5rem;padding-top:1.5rem;border-top:1px solid var(--rule);color:var(--ink-3);font-size:.82rem}
+  footer p{max-width:46em}
+  ::selection{background:var(--cobalt-soft)}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div class="kicker">Sales call · Saal Anatolia, Duisburg · 15 minutes</div>
+    <h1>The Anatolia Close</h1>
+    <p class="standfirst">How Davet gets sold for €199 a month to a wedding hall that has never bought software — line by line, with the reasoning beside it.</p>
+  </header>
+
+  <section>
+    <h2>The man across the table</h2>
+    <p class="sublede">Not a target segment. One person, with numbers that have to add up on Saturday.</p>
+
+    <div class="persona">
+      <div class="persona-head">
+        <span class="persona-name">Murat Özdemir, 47</span>
+        <span class="persona-role">Owner, Saal Anatolia — Duisburg-Marxloh</span>
+      </div>
+      <dl class="persona-grid">
+        <div class="fact">
+          <dt>The business</dt>
+          <dd>Two halls, <strong>450</strong> and <strong>220</strong> seats. Took it over from his father in 2011.</dd>
+        </div>
+        <div class="fact">
+          <dt>Volume</dt>
+          <dd><strong>85 events</strong> a year — 60 weddings, plus engagements, henna nights, circumcision parties.</dd>
+        </div>
+        <div class="fact">
+          <dt>One evening</dt>
+          <dd>Avg. <strong>380 guests</strong>, €48 menu, roughly <strong>€18,000</strong> in revenue.</dd>
+        </div>
+        <div class="fact">
+          <dt>Staff</dt>
+          <dd>Six permanent, up to 20 casuals on a Saturday. His wife does the books.</dd>
+        </div>
+        <div class="fact">
+          <dt>What keeps him up</dt>
+          <dd>The headcount arrives three days before the event — and is off by <strong>30 to 60 people</strong> every single time.</dd>
+        </div>
+        <div class="fact">
+          <dt>Marketing</dt>
+          <dd>Instagram, 8,200 followers. One wedding fair a year at €2,400 a booth. Otherwise word of mouth.</dd>
+        </div>
+        <div class="fact">
+          <dt>How he buys</dt>
+          <dd>Bought a €4,000 website in 2019 that nobody maintains. Suspicious of "digitalisation" ever since. Pays by invoice.</dd>
+        </div>
+        <div class="fact">
+          <dt>Decision rule</dt>
+          <dd>Does Saturday night get calmer <em>without</em> him having to sit down at a computer? Then yes.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <h2>The number, before you drive over</h2>
+    <p class="sublede">Never calculate with the menu price. A hall owner knows his food cost, will correct you instantly — and then the meeting is over. Calculate with what he pays for the ingredients, and he calculates along with you.</p>
+
+    <div class="ledger-scroll">
+      <table>
+        <thead>
+          <tr><th>What the safety margin costs him today</th><th class="num">Per night</th><th class="num">Per year</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cooking a safety buffer — 8% on 380 guests is 30 covers, €16 food cost each</td>
+            <td class="num">€480</td><td class="num">€28,800</td>
+          </tr>
+          <tr>
+            <td>One casual server too many — one per 25 guests, €120 a night</td>
+            <td class="num">€100</td><td class="num">€6,000</td>
+          </tr>
+          <tr class="total">
+            <td>Thrown away because the number is wrong</td>
+            <td class="num">€580</td><td class="num">€34,800</td>
+          </tr>
+          <tr class="cost">
+            <td>Davet Profi, unlimited</td>
+            <td class="num">—</td><td class="num">€2,388</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="verdict">
+      <strong>14.6× return</strong>
+      <p>And that is only the kitchen. Sixty weddings times 380 guests is 22,800 people a year opening an invitation with <em>his</em> hall on it. Half a percent of them are planning a wedding themselves — 114 warm leads he gives away for free today. Two bookings out of that is €36,000 in revenue.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The conversation</h2>
+    <p class="sublede">Friday morning, in the hall, not the office. No laptop on the table. No deck. English above, the words you actually say underneath.</p>
+
+    <div class="beat">
+      <div class="clock">Minute 0</div>
+      <div>
+        <p class="say">"Herr Özdemir, I sent you something on WhatsApp. Go on, open it."</p>
+        <p class="de">„Herr Özdemir, ich hab Ihnen was auf WhatsApp geschickt. Machen Sie's mal auf."</p>
+        <p class="stage">Then put your own phone away and say nothing. He opens a finished invitation for a wedding happening at his hall next month — his logo, his hall, his photo, Iznik blue, in Turkish. The veil parts.</p>
+      </div>
+      <div class="why">
+        <span class="why-label">Ownership before purchase</span>
+        <p>He is holding it, on his own device, with his own name on it. From this second on he is not weighing up a product — he is deciding whether to give back something that already feels like his.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 2</div>
+      <div>
+        <p class="say"><em>Say nothing.</em></p>
+        <p class="stage">Let him scroll. He will turn the phone around and show someone — the chef, his son, his wife. Wait for that. That is the proof, not whatever you say next.</p>
+      </div>
+      <div class="why">
+        <span class="why-label">Salesman talk</span>
+        <p>In the German Mittelstand, a smooth flow of words is a warning sign. Staying quiet while the product does the work reads as someone who knows their product.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 3</div>
+      <div>
+        <p class="say">"Four hundred guests get that on their phone. My company's name is nowhere on it. Only your hall."</p>
+        <p class="de">„Das kriegen 400 Gäste aufs Handy. Meine Firma steht da nirgends drauf. Nur Ihr Saal."</p>
+      </div>
+      <div class="why">
+        <span class="why-label">Standing</span>
+        <p>In owner-run businesses, pride is a harder buying motive than efficiency — and software sellers almost always miss it. His father's hall, presented better than it ever has been.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 4</div>
+      <div>
+        <p class="say">"Can I ask you something — how many covers do you cook too many, just to be safe?"<br>
+        <em>… "And what does one cover cost you to buy in?"</em></p>
+        <p class="de">„Darf ich Sie was fragen: Wie viele Gedecke kochen Sie sicherheitshalber zu viel?" … „Und was kostet Sie ein Gedeck im Einkauf?"</p>
+        <p class="stage">Write his numbers on paper, not yours. Times sixty nights. Slide the paper across and leave it lying there.</p>
+      </div>
+      <div class="why">
+        <span class="why-label">Self-generated</span>
+        <p>A number he said out loud himself, he cannot dispute. A number from your slide is a claim, and claims get argued with.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 7</div>
+      <div>
+        <p class="say">"And this is what it looks like for you, three weeks out."</p>
+        <p class="de">„Und so sieht das für Sie aus, drei Wochen vorher."</p>
+        <p class="stage">One screenshot on the phone: <strong>312 attending · 47 declined · 28 children under 6 · 14 vegetarian.</strong> Underneath: "As of nine o'clock this morning."</p>
+      </div>
+      <div class="why">
+        <span class="why-label">From worry to number</span>
+        <p>His problem was never "not enough invitations". It was not knowing, on the Wednesday before the Saturday. Show the uncertainty disappearing — not how pretty the design is.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 9</div>
+      <div>
+        <p class="say">"You don't have to log in anywhere. You send me the couple's names, the date and which hall, on WhatsApp. The invitation is up the next day."</p>
+        <p class="de">„Sie müssen sich nirgends einloggen. Sie schicken mir per WhatsApp: Namen des Paares, Datum, welcher Saal. Am nächsten Tag steht die Einladung."</p>
+      </div>
+      <div class="why">
+        <span class="why-label">The actual lever</span>
+        <p>He doesn't want software, he wants an outcome. "We do it for you" beats "you can do it yourself" in owner-run businesses every time — and it keeps you close to the customer through your first year, which is where you learn the product.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 11</div>
+      <div>
+        <p class="say">"The first three weddings are on me. If the numbers don't hold up after that, you've paid nothing and we shake hands."</p>
+        <p class="de">„Die ersten drei Hochzeiten mache ich umsonst. Wenn die Zahlen danach nicht stimmen, haben Sie nichts gezahlt und wir geben uns die Hand."</p>
+      </div>
+      <div class="why">
+        <span class="why-label">Risk, not upside</span>
+        <p>German small-business owners buy certainty, not opportunity. An argument that lowers his risk lands harder than one that raises his gain, at the identical amount of money.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 13</div>
+      <div>
+        <p class="say">"€199 a month. Unlimited weddings. Cancel monthly. Invoice or direct debit, whichever you prefer."</p>
+        <p class="de">„199 € im Monat. Unbegrenzt viele Hochzeiten. Monatlich kündbar. Rechnung oder Lastschrift, wie Sie möchten."</p>
+        <p class="stage">Four sentences. Then stay silent until he answers — even if it takes twenty seconds.</p>
+      </div>
+      <div class="why">
+        <span class="why-label">A price with no leaflet</span>
+        <p>Explaining a price is apologising for it. "Cancel monthly" takes the sting out of the figure: he isn't deciding on €2,388, he's deciding on €199.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="clock">Minute 14</div>
+      <div>
+        <p class="say">"I got it down to one page. The rest is paperwork, and that's mine to do."</p>
+        <p class="de">„Ich hab's auf eine Seite gebracht. Der Rest ist Papierkram, den mache ich."</p>
+        <p class="stage">One-page contract, data-processing agreement stapled to it, SEPA mandate. The pen is already on the table.</p>
+      </div>
+      <div class="why">
+        <span class="why-label">No second meeting</span>
+        <p>A proposal he should "look over calmly" dies in a pile. Bringing the data-processing agreement unasked signals: this one has worked with German businesses before.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What he will say</h2>
+    <p class="sublede">Four objections cover almost everything. Every answer is shorter than the objection.</p>
+
+    <div class="obj">
+      <div class="obj-row">
+        <div class="obj-q">"My couples want printed cards."<small>„Meine Paare wollen gedruckte Karten."</small></div>
+        <div class="obj-a"><p>"Of course. You get the print file in the same design, with a QR code on it. The card stays — the counting goes digital. Your printer keeps earning, you stop guessing."</p></div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"What about data protection?"<small>„Und der Datenschutz?"</small></div>
+        <div class="obj-a"><p>"Servers in Germany. Data-processing agreement is right here, ready to sign. No Google fonts, no trackers — your guests don't even see a cookie banner. Guest data deletes itself 90 days after the wedding."</p></div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"I've already got Instagram."<small>„Ich hab doch Instagram."</small></div>
+        <div class="obj-a"><p>"Instagram reaches people who follow you. The invitation reaches 400 guests who just attended a wedding in your hall. There are no better leads than that — and you give them away every Saturday."</p></div>
+      </div>
+      <div class="obj-row">
+        <div class="obj-q">"And if you're gone in two years?"<small>„Und wenn es Sie in zwei Jahren nicht mehr gibt?"</small></div>
+        <div class="obj-a"><p>"Then you press one button and have everything as PDF and Excel on your computer. It's in the contract. I'd have asked the same thing."</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pricing</h2>
+    <p class="sublede">Three tiers, so that €199 is the middle one. A planner with twelve weddings a year won't pay €199 — and should still become a customer.</p>
+    <div class="tiers">
+      <div class="tier">
+        <span class="tier-name">Basis</span>
+        <span class="tier-price">€79<span> / month</span></span>
+        <ul>
+          <li>up to 15 invitations a year</li>
+          <li>all styles and languages</li>
+          <li>responses as Excel</li>
+        </ul>
+      </div>
+      <div class="tier pick">
+        <span class="tier-name">Profi — for venues</span>
+        <span class="tier-price">€199<span> / month</span></span>
+        <ul>
+          <li>unlimited weddings</li>
+          <li>your logo, your colours, your own web address</li>
+          <li>guest lists, children and meal counts</li>
+          <li>automatic reminders to guests</li>
+          <li>print file with QR code</li>
+          <li>data-processing agreement, imprint per invitation</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <span class="tier-name">Venue group</span>
+        <span class="tier-price">€399<span> / month</span></span>
+        <ul>
+          <li>multiple locations</li>
+          <li>booking export into your calendar</li>
+          <li>named contact with a direct line</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Annual contract: two months free, <strong>€1,990</strong>, payable by invoice. Plenty of businesses this size would rather pay once a year than be reminded of a direct debit every month.</p>
+  </section>
+
+  <section>
+    <h2>What has to be built before you ring the bell</h2>
+    <p class="sublede">Without these six, the conversation above is a bluff. With them, it's an appointment.</p>
+    <ul class="checks">
+      <li><span><b>German interface, German domain.</b> The landing page, the login and the theme names exist only in English today — <code>&lt;html lang="en"&gt;</code> is hardcoded in the layout. A hall owner lands on "Wedding invitations, without the web developer" and leaves.</span></li>
+      <li><span><b>Multi-tenancy.</b> The schema knows only <code>owner_id</code>. Without organisations, logos, subdomains and quotas there is no B2B product — just an account several people share.</span></li>
+      <li><span><b>Named guest lists.</b> Today anyone with the link can answer as often as they like. For a number you cater 380 covers against, you need per-family invite links and fixed seat allowances.</span></li>
+      <li><span><b>Reminders.</b> The entire value rests on response rate. Automatic, 14 and 7 days out, by WhatsApp and email — this is the feature that carries the €199.</span></li>
+      <li><span><b>Legal compliance as a feature.</b> Downloadable data-processing agreement, the venue's imprint and privacy notice on every published invitation, documented deletion periods. The moment a business publishes the page, German imprint law applies.</span></li>
+      <li><span><b>Print file with QR code.</b> Turns the print shop down the road from a competitor into a distribution channel — it keeps selling cards and bundles your counting with them.</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>The figures in the example are calculated, not measured: 60 weddings, 380 guests, 8% buffer, €16 food cost. Replace them in the meeting with the numbers the owner says out loud — the arithmetic only convinces when it is his.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

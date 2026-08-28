@@ -1,0 +1,649 @@
+/* ---------------------------------------------------------------- reset -- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { min-height: 100dvh; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+img, svg, video { display: block; max-width: 100%; }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: inherit; }
+
+/* ----------------------------------------------------------- app shell -- */
+:root {
+  --app-bg: #FAF9F7;
+  --app-surface: #FFFFFF;
+  --app-ink: #1C1A17;
+  --app-muted: #6E675E;
+  --app-line: #E5E0D8;
+  --app-accent: #8A6B2F;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --app-bg: #121211; --app-surface: #1B1B19; --app-ink: #EFEBE4;
+    --app-muted: #9C958A; --app-line: #2E2D2A; --app-accent: #D3B87A;
+  }
+}
+
+body.app {
+  background: var(--app-bg);
+  color: var(--app-ink);
+  font-family: var(--f-outfit), system-ui, -apple-system, sans-serif;
+}
+
+/* ------------------------------------------------------- invite canvas -- */
+/* Tokens are injected inline per theme; everything below reads them only. */
+.invite {
+  position: relative;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body), system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+.invite h1, .invite h2, .invite h3, .invite .display {
+  font-family: var(--f-display), Georgia, serif;
+  font-weight: 400;
+  line-height: 1.12;
+  text-wrap: balance; /* Safari 17.4+; degrades harmlessly */
+}
+
+/* Surface textures ---------------------------------------------------- */
+.surface-grain::before,
+.surface-linen::before,
+.surface-marble::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+}
+.surface-grain::before {
+  opacity: .35; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+}
+.surface-linen::before {
+  opacity: .5;
+  background-image:
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--rule) 9%, transparent) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg,  color-mix(in srgb, var(--rule) 7%, transparent) 0 1px, transparent 1px 3px);
+}
+.surface-marble::before {
+  opacity: .55;
+  background-image:
+    radial-gradient(120% 70% at 12% 8%,  color-mix(in srgb, var(--rule) 16%, transparent) 0%, transparent 55%),
+    radial-gradient(90% 60% at 88% 22%, color-mix(in srgb, var(--accent) 10%, transparent) 0%, transparent 60%),
+    radial-gradient(140% 80% at 40% 92%, color-mix(in srgb, var(--rule) 12%, transparent) 0%, transparent 58%);
+}
+.invite > * { position: relative; z-index: 1; }
+
+/* Everything the renderer draws sizes against THIS box, not the window. The
+   same component runs full-screen and inside a 20rem preview frame, so cqw and
+   @container are what keep both correct. The music button is deliberately left
+   outside: container-type would make its position:fixed resolve against the
+   container and it would scroll away on the real page. */
+.invite-body { container-type: inline-size; }
+
+/* Layout -------------------------------------------------------------- */
+.wrap { width: min(100% - 2.5rem, 40rem); margin-inline: auto; }
+.section { padding-block: clamp(3.5rem, 9cqw, 6.5rem); }
+.center { text-align: center; }
+
+.eyebrow {
+  font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted); font-weight: 400;
+}
+.section-title { font-size: clamp(1.65rem, 5.2cqw, 2.4rem); margin-block: .5rem .35rem; }
+.section-sub { color: var(--muted); font-size: .95rem; }
+
+/* Ornament rule ------------------------------------------------------- */
+.rule { display: flex; align-items: center; gap: .85rem; justify-content: center; margin-block: 1.5rem; }
+.rule::before, .rule::after {
+  content: ""; height: 1px; flex: 1; max-width: 7rem;
+  background: linear-gradient(90deg, transparent, var(--rule));
+}
+.rule::after { background: linear-gradient(90deg, var(--rule), transparent); }
+.rule svg { color: var(--accent); flex: none; }
+
+/* Cover / opener ------------------------------------------------------ */
+.cover {
+  min-height: 100dvh;              /* dvh: the iOS URL bar crops 100vh */
+  display: grid; place-items: center; text-align: center;
+  padding: 2rem; position: relative;
+}
+.cover-names { font-size: clamp(2.2rem, 11cqw, 5rem); letter-spacing: -0.01em; }
+.cover-amp { color: var(--accent); font-style: italic; display: block; font-size: .55em; margin-block: .15em; }
+
+.btn {
+  -webkit-appearance: none; appearance: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-height: 48px; padding: 0 1.6rem; border-radius: 999px;
+  border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent);
+  font-size: 1rem; letter-spacing: .06em; cursor: pointer;
+  transition: transform .18s ease, opacity .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover { opacity: .92; }
+.btn:active { transform: scale(.98); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--rule); }
+
+/* Countdown ----------------------------------------------------------- */
+/* Two rows first, four across only once there is room: "Sekunden" and
+   "Saniye" are much wider than "Secs", and the band must never spill. */
+.countdown {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem; max-width: 26rem; margin-inline: auto;
+}
+@container (min-width: 19rem) {
+  .countdown { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; }
+}
+.cd-cell {
+  border: 1px solid var(--rule); border-radius: 4px; padding: .7rem .2rem;
+  min-width: 0; overflow: hidden;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.cd-num { font-family: var(--f-display), serif; font-size: clamp(1.2rem, 6cqw, 2rem); font-variant-numeric: tabular-nums; }
+.cd-lbl {
+  font-size: clamp(.5rem, 2.4cqw, .64rem);
+  letter-spacing: .07em; line-height: 1.25; text-transform: uppercase;
+  color: var(--muted); overflow-wrap: anywhere; hyphens: auto;
+  /* Letter-spacing adds a trailing gap after the last glyph; reclaim it so a
+     centred label stays centred and cannot push past the cell. */
+  margin-inline-end: -.07em;
+}
+
+/* Cards --------------------------------------------------------------- */
+.card {
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 6px; padding: clamp(1rem, 4cqw, 2rem);
+}
+.stack > * + * { margin-top: 1rem; }
+.stack > *, .grid-2 > *, .countdown > * { min-width: 0; }
+.invite p, .invite h1, .invite h2, .invite .display { overflow-wrap: anywhere; }
+.grid-2 { display: grid; gap: 1rem; }
+@container (min-width: 34rem) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+/* Arabic -------------------------------------------------------------- */
+.arabic {
+  font-family: var(--f-amiri), serif;
+  font-size: clamp(1.15rem, 5.5cqw, 1.9rem);
+  line-height: 2.1; color: var(--accent);
+}
+
+/* Forms --------------------------------------------------------------- */
+.field { display: block; margin-bottom: 1rem; }
+.label { display: block; font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+.input, .textarea, .select {
+  width: 100%; font-size: 16px;   /* below 16px iOS zooms the page on focus */
+  padding: .7rem .85rem; border: 1px solid var(--rule); border-radius: 4px;
+  background: var(--surface); color: var(--ink); -webkit-appearance: none; appearance: none;
+}
+.input:focus-visible, .textarea:focus-visible, .select:focus-visible, .btn:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+.textarea { min-height: 6rem; resize: vertical; }
+.choice { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.choice button {
+  min-height: 48px; border: 1px solid var(--rule); background: transparent;
+  border-radius: 4px; cursor: pointer; color: var(--ink);
+}
+.choice button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.note { font-size: .78rem; color: var(--muted); }
+
+/* Reveal on scroll ---------------------------------------------------- */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .btn { transition: none; }
+}
+
+/* Foil opener --------------------------------------------------------- */
+.foil-wrap {
+  position: relative; width: min(84cqw, 21rem); aspect-ratio: 3 / 2;
+  margin-inline: auto; border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--rule);
+}
+.foil-under {
+  position: absolute; inset: 0; display: grid; place-content: center;
+  gap: .5rem; justify-items: center; background: var(--surface); color: var(--accent);
+  padding: 1rem; text-align: center;
+}
+.foil-date { color: var(--ink); font-size: clamp(1.1rem, 6cqw, 1.6rem); line-height: 1.2; }
+.foil-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  /* Without this iOS Safari pans the page instead of tracking the finger. */
+  touch-action: none;
+  cursor: crosshair;
+  transition: opacity .5s ease;
+}
+.foil-canvas.is-cleared { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .foil-canvas { transition: none; } }
+
+/* Envelope opener ----------------------------------------------------- */
+.env {
+  display: block; -webkit-appearance: none; appearance: none;
+  width: min(84cqw, 20rem); aspect-ratio: 3 / 2; margin-inline: auto; position: relative;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 4px;
+  cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent;
+  perspective: 900px;
+}
+.env:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.env-card {
+  position: absolute; left: 8%; right: 8%; top: 18%; bottom: 10%;
+  background: var(--bg); border: 1px solid var(--rule); border-radius: 2px;
+  display: grid; place-items: center; padding: .5rem; text-align: center;
+  transform: translateY(12%); opacity: 0;
+  transition: transform .6s ease .15s, opacity .4s ease .15s;
+}
+.env[data-open="true"] .env-card { transform: translateY(-6%); opacity: 1; }
+.env-date { color: var(--ink); font-size: clamp(.95rem, 5cqw, 1.3rem); }
+.env-flap {
+  position: absolute; inset: 0 0 auto 0; height: 55%; z-index: 2;
+  background: var(--accent-soft); border-bottom: 1px solid var(--rule);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center; transition: transform .7s ease;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.env[data-open="true"] .env-flap { transform: rotateX(180deg); }
+.env-seal {
+  position: absolute; left: 50%; top: 52%; translate: -50% -50%; z-index: 3;
+  width: 3rem; height: 3rem; border-radius: 999px;
+  background: var(--accent); color: var(--on-accent);
+  display: grid; place-items: center;
+  transition: opacity .3s ease, transform .5s ease;
+}
+.env[data-open="true"] .env-seal { opacity: 0; transform: translate(-50%, -50%) scale(.6); }
+@media (prefers-reduced-motion: reduce) {
+  .env-flap, .env-card, .env-seal { transition: none; }
+}
+
+/* Music toggle -------------------------------------------------------- */
+.music-btn {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 20;
+  width: 44px; height: 44px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--ink);
+  display: grid; place-items: center;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+
+/* Foil / gilt lettering ----------------------------------------------- */
+.gilt {
+  background-image: linear-gradient(100deg,
+    var(--accent) 0%, color-mix(in srgb, var(--accent) 45%, #fff) 45%,
+    var(--accent) 60%, color-mix(in srgb, var(--accent) 70%, #000) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* ------------------------------------------------- preview scoping ------ */
+/* The renderer also runs inside a phone frame, where fixed positioning and a
+   full viewport height would both escape the frame. */
+.preview-scope .cover { min-height: var(--cover-h, 100dvh); }
+.preview-scope.surface-grain::before,
+.preview-scope.surface-linen::before,
+.preview-scope.surface-marble::before { position: absolute; }
+.preview-scope .music-btn { position: absolute; }
+
+/* ------------------------------------------------------------ builder --- */
+.builder { display: grid; grid-template-columns: 1fr; min-height: 100dvh; }
+@media (min-width: 62rem) {
+  .builder { grid-template-columns: minmax(0, 1fr) 26rem; }
+}
+
+.b-form { padding: 1.25rem 1.25rem 8rem; width: min(100%, 42rem); margin-inline: auto; }
+.b-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.b-back { text-decoration: none; color: var(--app-muted); font-size: .9rem; }
+.b-save { font-size: .78rem; color: var(--app-muted); }
+
+.b-section { border: 1px solid var(--app-line); border-radius: var(--radius); background: var(--app-surface); margin-bottom: .75rem; overflow: hidden; }
+.b-head {
+  width: 100%; display: grid; grid-template-columns: auto 1fr auto auto; gap: .75rem;
+  align-items: center; text-align: left; min-height: 56px; padding: 0 1rem;
+  background: none; border: 0; cursor: pointer;
+}
+.b-head-title { font-weight: 500; }
+.b-head-sum { font-size: .8rem; color: var(--app-muted); max-width: 12rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.b-head-chev { color: var(--app-muted); font-size: 1.2rem; width: 1rem; text-align: center; }
+.b-body { padding: .25rem 1rem 1.25rem; border-top: 1px solid var(--app-line); }
+
+.b-item { border: 1px dashed var(--app-line); border-radius: var(--radius); padding: 1rem; margin-top: 1rem; }
+.b-add, .b-remove, .b-linkbtn {
+  background: none; border: 1px solid var(--app-line); border-radius: 999px;
+  min-height: 40px; padding: 0 1rem; cursor: pointer; color: var(--app-ink); font-size: .85rem;
+}
+.b-add { margin-top: 1rem; }
+.b-remove { margin-top: .5rem; color: var(--app-muted); }
+
+.b-form .label { color: var(--app-muted); }
+.b-form .input, .b-form .textarea, .b-form .select {
+  background: var(--app-bg); border-color: var(--app-line); color: var(--app-ink);
+}
+.toggle { display: flex; align-items: center; gap: .6rem; min-height: 44px; cursor: pointer; font-size: .9rem; }
+.toggle input { width: 20px; height: 20px; accent-color: var(--app-accent); }
+
+/* Theme picker ---------------------------------------------------------- */
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: .6rem; }
+.theme-card {
+  text-align: left; padding: .6rem; border-radius: var(--radius); cursor: pointer;
+  border: 1px solid var(--app-line); background: var(--app-bg); display: grid; gap: .35rem;
+}
+.theme-card.is-on { border-color: var(--app-accent); box-shadow: 0 0 0 1px var(--app-accent); }
+.theme-swatch { display: flex; height: 2.6rem; border-radius: 4px; overflow: hidden; border: 1px solid var(--app-line); }
+.theme-swatch span { flex: 1; }
+.theme-name { font-size: .85rem; font-weight: 500; }
+.theme-blurb { font-size: .72rem; color: var(--app-muted); line-height: 1.35; }
+
+/* Verse picker ---------------------------------------------------------- */
+.verse-list { display: grid; gap: .5rem; margin-top: .75rem; }
+.verse-pick {
+  display: grid; gap: .25rem; text-align: left; cursor: pointer; padding: .75rem;
+  border: 1px solid var(--app-line); border-radius: var(--radius); background: var(--app-bg);
+}
+.verse-pick.is-on { border-color: var(--app-accent); box-shadow: 0 0 0 1px var(--app-accent); }
+.verse-ref { font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--app-muted); }
+.verse-text { font-size: .85rem; line-height: 1.45; }
+
+/* Publish --------------------------------------------------------------- */
+.b-publish { margin-top: 2rem; }
+.b-publish-btn { width: 100%; background: var(--app-accent); border-color: var(--app-accent); color: #fff; }
+.b-publish-btn:disabled { opacity: .45; cursor: not-allowed; }
+.b-missing { font-size: .82rem; color: var(--app-muted); margin-bottom: .6rem; }
+.b-share { margin-top: 1rem; display: grid; gap: .5rem; font-size: .85rem; }
+.b-share code { background: var(--app-bg); border: 1px solid var(--app-line); border-radius: 4px; padding: .5rem; overflow-wrap: anywhere; }
+.b-share button, .b-share a { justify-self: start; background: none; border: 0; color: var(--app-accent); cursor: pointer; padding: .4rem 0; }
+
+/* Preview pane ---------------------------------------------------------- */
+.b-preview { display: none; }
+.phone {
+  --cover-h: 100%;
+  width: 20rem; height: 42rem; overflow-y: auto; overflow-x: hidden;
+  border: 10px solid #1b1b1c; border-radius: 34px; background: #fff;
+  position: relative; -webkit-overflow-scrolling: touch;
+}
+.phone .invite { min-height: 100%; }
+
+@media (min-width: 62rem) {
+  .b-preview { display: block; position: sticky; top: 0; height: 100dvh; padding: 1.5rem; display: grid; place-items: center; background: var(--app-bg); border-left: 1px solid var(--app-line); }
+  .b-preview-toggle { display: none; }
+}
+@media (max-width: 61.99rem) {
+  .b-preview.is-open {
+    display: grid; place-items: center; position: fixed; inset: 0; z-index: 40;
+    background: var(--app-bg); padding: 1rem;
+  }
+  .b-preview.is-open .phone { width: min(92vw, 20rem); height: min(78dvh, 42rem); }
+  .b-preview-toggle { position: fixed; left: 50%; translate: -50% 0; bottom: 1rem; z-index: 50; background: var(--app-accent); border-color: var(--app-accent); color: #fff; }
+}
+
+/* ------------------------------------------------------------ pages ----- */
+.page { width: min(100% - 2.5rem, 60rem); margin-inline: auto; padding-block: 3rem 5rem; }
+/* German compounds — "Hochzeitseinladungen" — are a single unbreakable word
+   at 320px unless hyphenation is allowed. <html lang> is set, so it works. */
+.page h1 {
+  font-family: var(--f-cormorant), Georgia, serif; font-weight: 400;
+  font-size: clamp(1.8rem, 7.5vw, 3.4rem); line-height: 1.1;
+  overflow-wrap: anywhere; hyphens: auto; text-wrap: balance;
+}
+.page h2 {
+  font-family: var(--f-cormorant), Georgia, serif; font-weight: 400; font-size: 1.6rem;
+  margin-bottom: .75rem; overflow-wrap: anywhere; hyphens: auto;
+}
+.lede {
+  color: var(--app-muted); font-size: 1.05rem; max-width: 34rem; margin-top: 1rem;
+  overflow-wrap: anywhere; hyphens: auto;
+}
+.row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.cta {
+  -webkit-appearance: none; appearance: none; text-decoration: none;
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.5rem;
+  border-radius: 999px; background: var(--app-accent); color: #fff; border: 1px solid var(--app-accent); cursor: pointer;
+}
+.cta-ghost { background: transparent; color: var(--app-ink); border-color: var(--app-line); }
+.list { display: grid; gap: .75rem; margin-top: 1.5rem; }
+.list-row {
+  display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between;
+  border: 1px solid var(--app-line); border-radius: var(--radius); padding: 1rem; background: var(--app-surface);
+}
+.pill { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--app-line); border-radius: 999px; padding: .2rem .6rem; color: var(--app-muted); }
+.table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.table th, .table td { text-align: left; padding: .65rem .5rem; border-bottom: 1px solid var(--app-line); }
+.table th { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--app-muted); }
+.showcase { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 1rem; margin-top: 2rem; }
+.showcase-card { border: 1px solid var(--app-line); border-radius: var(--radius); overflow: hidden; }
+.showcase-band { height: 6rem; display: grid; place-items: center; font-family: var(--f-cormorant), serif; font-size: 1.5rem; }
+.showcase-meta { padding: .7rem .8rem; }
+.showcase-meta strong { display: block; font-weight: 500; font-size: .9rem; }
+.showcase-meta span { font-size: .75rem; color: var(--app-muted); }
+
+.b-address { margin-top: 1rem; }
+.b-address-preview { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .95rem; overflow-wrap: anywhere; }
+.b-address .note { margin-top: .3rem; }
+.b-address .b-linkbtn { margin-top: .5rem; }
+.input[aria-invalid="true"] { border-color: #b3261e; }
+
+/* Orientation, seed marks, delete ---------------------------------------- */
+/* Added with the German-first onboarding pass. */
+
+.b-progress { margin-bottom: 1rem; }
+.b-progress-bar {
+  height: 3px; background: var(--app-line); border-radius: 999px; overflow: hidden;
+}
+.b-progress-bar span {
+  display: block; height: 100%; background: var(--app-accent);
+  transition: width .25s ease;
+}
+@media (prefers-reduced-motion: reduce) { .b-progress-bar span { transition: none; } }
+.b-progress-text { font-size: .8rem; color: var(--app-muted); margin-top: .5rem; }
+.b-progress-text.is-ready { color: var(--app-accent); }
+.b-progress-count { font-variant-numeric: tabular-nums; }
+.b-jump {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font: inherit; color: var(--app-accent); text-decoration: underline;
+  text-underline-offset: .15em;
+}
+
+.b-example {
+  border: 1px dashed var(--app-line); border-radius: var(--radius);
+  padding: .85rem 1rem; margin-bottom: 1rem; font-size: .85rem;
+  color: var(--app-muted); background: var(--app-surface);
+}
+.b-example .b-linkbtn { margin-top: .4rem; }
+
+/* Marks a field still holding our worked example. Reads as an offer to empty
+   it, not as an error, because a real Amir will see it too. */
+.b-seed {
+  margin-left: .5rem; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+  border: 1px solid var(--app-line); border-radius: 999px; padding: .1rem .45rem;
+  color: var(--app-muted); vertical-align: .1em;
+}
+.input.is-seed, .textarea.is-seed { color: var(--app-muted); font-style: italic; }
+.input.is-seed:focus, .textarea.is-seed:focus { color: var(--app-ink); font-style: normal; }
+
+/* A tick per required section, so the header carries the same state as the bar. */
+.b-tick {
+  width: 1.1rem; height: 1.1rem; border-radius: 999px;
+  border: 1px solid var(--app-line); display: grid; place-items: center;
+  font-size: .7rem; color: var(--app-bg);
+}
+.b-tick.is-on { background: var(--app-accent); border-color: var(--app-accent); }
+.b-tick.is-none { border-color: transparent; }
+
+.cta-danger { color: var(--app-muted); }
+.cta-danger:hover:not(:disabled), .cta-danger:focus-visible {
+  color: #A6392B; border-color: #A6392B;
+}
+.cta-danger:disabled { opacity: .5; cursor: progress; }
+
+.dash-empty {
+  margin-top: 2rem; padding: 2.5rem 0 0; border-top: 1px solid var(--app-line);
+}
+
+
+/* Invitation footer: the venue's line -------------------------------------- */
+.organizer {
+  margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule);
+  display: grid; gap: .2rem; justify-items: center;
+}
+.organizer-name { font-family: var(--f-display), serif; font-size: 1.15rem; }
+.organizer-name a, .organizer-contact a { color: inherit; text-decoration: none; }
+.organizer-name a { border-bottom: 1px solid var(--rule); }
+.organizer-contact { font-size: .8rem; color: var(--muted); }
+.organizer-contact a { text-decoration: underline; text-underline-offset: .2em; }
+
+/* Language switch ---------------------------------------------------------- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.page-bar { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; }
+.locale-switch .select { width: auto; min-height: 40px; padding-block: 0; }
+.b-topbar-right { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.b-topbar-right .select { min-height: 36px; font-size: .82rem; padding: 0 1.75rem 0 .6rem; }
+.dash-head {
+  display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;
+  justify-content: space-between;
+}
+
+/* iOS-style date wheel ----------------------------------------------------- */
+.datebtn {
+  -webkit-appearance: none; appearance: none; width: 100%; text-align: left;
+  min-height: 48px; padding: .6rem .9rem; border-radius: var(--radius);
+  border: 1px solid var(--app-line); background: var(--app-bg); color: var(--app-ink);
+  font: inherit; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+}
+.datebtn .is-empty { color: var(--app-muted); }
+.datebtn-hint { font-size: .75rem; color: var(--app-muted); flex: none; }
+
+.sheet-backdrop {
+  position: fixed; inset: 0; z-index: 60; background: rgba(0, 0, 0, .45);
+  display: grid; place-items: end center; padding: 0;
+}
+@media (min-width: 40rem) { .sheet-backdrop { place-items: center; padding: 1rem; } }
+
+.sheet {
+  width: min(100%, 26rem); background: var(--app-surface);
+  border: 1px solid var(--app-line); border-radius: 16px 16px 0 0;
+  padding: .5rem .75rem calc(.75rem + env(safe-area-inset-bottom));
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, .3);
+}
+@media (min-width: 40rem) { .sheet { border-radius: 16px; padding-bottom: .75rem; } }
+
+.sheet-head {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .5rem;
+  padding: .35rem .25rem .6rem; border-bottom: 1px solid var(--app-line);
+}
+.sheet-title {
+  text-align: center; font-size: .85rem; color: var(--app-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.sheet-act {
+  background: none; border: 0; font: inherit; cursor: pointer; padding: .5rem .4rem;
+  color: var(--app-muted); min-height: 44px;
+}
+.sheet-act.is-primary { color: var(--app-accent); font-weight: 600; }
+.sheet-clear {
+  width: 100%; background: none; border: 0; font: inherit; cursor: pointer;
+  color: var(--app-muted); min-height: 44px; margin-top: .25rem;
+  border-top: 1px solid var(--app-line);
+}
+
+.wheels {
+  position: relative; display: grid; grid-template-columns: 3.5rem 1fr 4.5rem;
+  gap: .25rem; padding: .5rem 0;
+  /* Fades the rows away from the selection band, the way the native one does. */
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+          mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent);
+}
+.wheel-band {
+  position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%;
+  height: 36px; border-radius: 8px; background: var(--app-bg);
+  pointer-events: none;
+}
+.wheel {
+  height: 180px; overflow-y: auto; overscroll-behavior: contain;
+  scroll-snap-type: y mandatory; scrollbar-width: none;
+  text-align: center; position: relative;
+}
+.wheel::-webkit-scrollbar { display: none; }
+.wheel:focus-visible { outline: 2px solid var(--app-accent); outline-offset: 2px; border-radius: 8px; }
+.wheel-item {
+  /* `center`, not `start`: the band sits in the middle of the column, so the
+     offset that centres a row is what we scroll to. With `start` that offset
+     is not a snap point for the first two rows, and the browser quietly
+     re-snapped them a row down — one column landing off its neighbours. */
+  height: 36px; line-height: 36px; scroll-snap-align: center;
+  font-size: .95rem; color: var(--app-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  transition: color .12s ease, opacity .12s ease;
+}
+.wheel-item.is-on { color: var(--app-ink); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .wheel { scroll-behavior: auto; }
+  .wheel-item { transition: none; }
+}
+
+/* Responsive pass ---------------------------------------------------------- */
+/* Long German labels are the stress case throughout; these keep every row
+   inside its box rather than relying on the text happening to be short. */
+
+.b-head-title { min-width: 0; overflow-wrap: anywhere; }
+.b-head-sum { min-width: 0; }
+.b-form .input, .b-form .textarea, .b-form .select, .datebtn { max-width: 100%; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 34rem) {
+  /* Actions get their own row and share it evenly, instead of overflowing. */
+  .list-row { flex-direction: column; align-items: stretch; }
+  .list-row > .row { width: 100%; }
+  .list-row > .row .cta { flex: 1 1 auto; justify-content: center; }
+  .list-row > .row .pill { width: 100%; text-align: center; }
+
+  .dash-head { flex-direction: column; align-items: stretch; }
+  .dash-head .row { width: 100%; }
+  .dash-head .select { flex: 1 1 100%; }
+
+  .b-head-sum { max-width: 6rem; }
+  .b-topbar { flex-wrap: wrap; gap: .5rem; }
+  .showcase { grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); }
+}
+
+
+/* Organisation, guest list, reminders -------------------------------------- */
+
+.page-bar { gap: .75rem; align-items: center; }
+.org-chip {
+  display: inline-flex; align-items: center; gap: .5rem; margin-right: auto;
+  text-decoration: none; color: var(--app-ink); font-size: .9rem;
+  border: 1px solid var(--app-line); border-radius: 999px; padding: .25rem .8rem .25rem .25rem;
+  min-width: 0;
+}
+.org-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.org-chip:hover { border-color: var(--app-accent); }
+
+.wordmark {
+  display: grid; place-items: center; flex: none; border-radius: 999px;
+  background: var(--app-accent); color: #fff; font-weight: 600; letter-spacing: .02em;
+}
+.wordmark-img { border-radius: 6px; object-fit: contain; flex: none; }
+.org-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem; }
+.org-head strong { font-size: 1.1rem; overflow-wrap: anywhere; }
+
+.guest-total { font-size: .9rem; color: var(--app-muted); margin: 1rem 0; }
+.guest-total strong { color: var(--app-ink); font-variant-numeric: tabular-nums; }
+
+.reminder-text {
+  font-size: .82rem; color: var(--app-muted); margin-top: .5rem;
+  white-space: pre-wrap; overflow-wrap: anywhere; max-width: 40rem;
+}
+
+@media (max-width: 34rem) {
+  .org-chip { margin-right: 0; width: 100%; }
+  .page-bar { flex-wrap: wrap; }
+  .page-bar .locale-switch { width: 100%; }
+  .page-bar .locale-switch .select { width: 100%; }
+}
+
+/* Four short fields per household read better side by side than stacked. */
+.guest-fields { display: grid; grid-template-columns: 1fr; gap: 0 1rem; }
+@media (min-width: 34rem) {
+  .guest-fields { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+}
+.guest-fields .field { min-width: 0; }
