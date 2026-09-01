@@ -1,4 +1,4 @@
-# Opener film — masters
+# Opener film: masters
 
 Source material for `public/beispiel/tor.mp4`. Not served; kept so the clip can
 be re-cut without regenerating anything. See `docs/opener-film.md` for the brief.
@@ -13,7 +13,7 @@ be re-cut without regenerating anything. See `docs/opener-film.md` for the brief
 
 10s retimed to 3.4s on an ease-in-out ramp: **1.2× at t=0, peaking near 5.7×
 around 1.5s, decelerating to 0.34× and settling on the last frame**, which the
-final four output frames hold. It arrives rather than cuts — the earlier
+final four output frames hold. It arrives rather than cuts, the earlier
 version ran flat out into the handover and the ending read as abrupt.
 
 The beats land at doors-open 1.31s, threshold 1.64s, dancers 2.10s, which is

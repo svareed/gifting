@@ -17,7 +17,7 @@ import { useEffect, useMemo, useRef } from "react";
  *
  * Falling and turning are animated purely by CSS transform, so the compositor
  * owns every frame. Scroll coupling is the one piece that needs script, and it
- * uses updatePlaybackRate — built for exactly this — rather than rewriting
+ * uses updatePlaybackRate, built for exactly this, rather than rewriting
  * animation-duration, which would make every petal jump.
  */
 
@@ -76,7 +76,7 @@ export function Blossom() {
   /* --- scroll velocity ---------------------------------------------------
    * Scrolling hard should feel like a gust. The rate is raised by scroll
    * speed and eased back to 1, and the loop only runs while it is away from
-   * 1 — an idle page costs no frames at all.
+   * 1: an idle page costs no frames at all.
    */
   useEffect(() => {
     if (
@@ -92,8 +92,8 @@ export function Blossom() {
     let applied = 1;
     let raf = 0;
 
-    // Petals live in two separate overlays — one behind the content, one in
-    // front — so they are collected by animation name rather than by walking
+    // Petals live in two separate overlays, one behind the content, one in
+    // front, so they are collected by animation name rather than by walking
     // a single container.
     const apply = (r: number) => {
       for (const a of document.getAnimations()) {

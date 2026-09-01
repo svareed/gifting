@@ -1,6 +1,6 @@
 /**
  * Household link tokens. Short enough to read aloud over the phone, long
- * enough that guessing another household's link is not worth trying — these
+ * enough that guessing another household's link is not worth trying, these
  * only ever reveal one household's name and seat count, never the list.
  */
 const ALPHABET = "abcdefghjkmnpqrstuvwxyz23456789";

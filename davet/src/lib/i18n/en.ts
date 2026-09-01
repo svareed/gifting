@@ -44,7 +44,7 @@ export const en = {
     message: "A note for the couple (optional)",
     send: "Send RSVP",
     sending: "Sending",
-    thanks: "Thank you — your reply has reached the couple.",
+    thanks: "Thank you, your reply has reached the couple.",
     failed: "That didn't send. Please try again.",
     seatsHint: "{n} seats are held for you.",
     privacy: "Your name and reply are shared only with the couple, and deleted after the wedding.",
@@ -64,7 +64,7 @@ export const en = {
   actions: { print: "Print invitation" },
   /**
    * Overrides applied when an invitation is set to formal address. English
-   * has no du/Sie, so these differ only in register — which is exactly what a
+   * has no du/Sie, so these differ only in register, which is exactly what a
    * formal English invitation does.
    */
   formal: {
@@ -83,7 +83,7 @@ export const en = {
       notAttending: "Regrettably unable",
       guests: "Guests (including yourself)",
       message: "A note for the couple (optional)",
-      thanks: "Thank you — your reply has reached the couple.",
+      thanks: "Thank you, your reply has reached the couple.",
       seatsHint: "{n} seats are held for you.",
       privacy: "Your name and reply are shared only with the couple, and deleted after the wedding.",
     },
@@ -109,7 +109,7 @@ export const en = {
       "ivory-gold":      { name: "Ivory & Gold",      blurb: "Warm paper, gold hairlines, unhurried serif." },
       "onyx-champagne":  { name: "Onyx & Champagne",  blurb: "Near-black ground, champagne foil, deco rules." },
       "emerald-brass":   { name: "Emerald & Brass",   blurb: "Deep green and brass, Arabic given room to breathe." },
-      "iznik-blue":      { name: "Iznik Blue",        blurb: "Ottoman tilework — cobalt, white, a line of coral." },
+      "iznik-blue":      { name: "Iznik Blue",        blurb: "Ottoman tilework: cobalt, white, a line of coral." },
       "marble-gilt":     { name: "Marble & Gilt",     blurb: "Veined stone under gilt geometry." },
       "rosewater":       { name: "Rosewater",         blurb: "Blush ground, botanical line-work, soft contrast." },
       "sand-terracotta": { name: "Sand & Terracotta", blurb: "Warm earth, contemporary, restrained." },
@@ -120,21 +120,21 @@ export const en = {
   landing: {
     h1a: "Wedding invitations,",
     h1b: "without the web developer.",
-    lede: "Enter your names, your events and your verses. We render the invitation — in German, Turkish or English — and give you one link to send.",
+    lede: "Enter your names, your events and your verses. We render the invitation in German, Turkish or English and give you one link to send.",
     start: "Create an invitation",
     example: "See an example",
     demo: "Demo mode: no database configured, so nothing you make here survives a restart. Add Supabase credentials to persist.",
     stylesHeading: "{n} styles",
-    stylesLede: "Each one changes the palette, the type and the ornament — never the words.",
+    stylesLede: "Each one changes the palette, the type and the ornament, never the words.",
   },
   login: {
     lede: "No password. Enter your email and we send a link that signs you in.",
-    demoLede: "Demo mode — no database is configured, so there is nothing to sign in to. Everything works; nothing survives a restart.",
+    demoLede: "Demo mode: no database is configured, so there is nothing to sign in to. Everything works; nothing survives a restart.",
     continue: "Continue",
     email: "Email",
     send: "Send me a link",
     sending: "Sending",
-    sent: "Check your inbox — the link signs you straight in.",
+    sent: "Check your inbox, the link signs you straight in.",
     failed: "That did not work. Please try again.",
   },
 
@@ -156,7 +156,7 @@ export const en = {
   },
   guests: {
     heading: "Guest list",
-    lede: "One link per household. The seats you set here are the most that household can confirm — which is what makes the total safe to cater against.",
+    lede: "One link per household. The seats you set here are the most that household can confirm, which is what makes the total safe to cater against.",
     household: "Household",
     seats: "Seats",
     email: "Email (optional)",
@@ -207,7 +207,7 @@ export const en = {
     startBlank: "Start empty",
     example: "example",
     clear: "clear",
-    exampleLede: "This is still our worked example — type over it, or empty every field at once.",
+    exampleLede: "This is still our worked example: type over it, or empty every field at once.",
     clearAll: "Empty the example text",
     ready: "Ready to publish",
     done: "done",
@@ -268,7 +268,7 @@ export const en = {
       tradition: "Tradition",
       editAddress: "Edit address",
       addressFollowsNames: "Follows the names until you edit it",
-      addressFrozen: "Fixed — guests may already have this link",
+      addressFrozen: "Fixed, guests may already have this link",
       followsCouple: "Follows the couple\u2019s name until you change it",
       showSection: "Show this section",
     },

@@ -196,7 +196,7 @@ export function Invite({
                         <Rule id={theme.ornament} size={16} />
                         <p className="event-when">{formatEventDate(e.startsAt, invite.locale, tz)}</p>
                         <p className="event-when">
-                          {formatEventTime(e.startsAt, invite.locale, tz)}{e.note ? ` — ${e.note}` : ""}
+                          {formatEventTime(e.startsAt, invite.locale, tz)}{e.note ? `: ${e.note}` : ""}
                         </p>
                         {e.mapsUrl && (
                           <p className="event-link">

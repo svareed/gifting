@@ -18,7 +18,7 @@ export const DEFAULT_LOCALE: Locale = "de";
  */
 export const UI_LOCALE_COOKIE = "davet_ui_locale";
 
-/** Narrows an untrusted string — a cookie value, a form field — to a Locale. */
+/** Narrows an untrusted string (a cookie value, a form field) to a Locale. */
 export function parseLocale(value: string | undefined | null): Locale | null {
   return LOCALES.includes(value as Locale) ? (value as Locale) : null;
 }

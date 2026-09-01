@@ -399,8 +399,8 @@ function Arbour() {
  * Everything is driven by one custom property, `--open`, running 0 to 1: the
  * dolly, the leaves' swing, the light on the threshold, the flood at the end
  * and the type fading off the front. That is what lets a finger drag and a
- * button tap share a single mechanism — the drag sets `--open` directly with
- * transitions off, the tap transitions it to 1 — instead of two animation
+ * button tap share a single mechanism, the drag sets `--open` directly with
+ * transitions off, the tap transitions it to 1, instead of two animation
  * paths that have to be kept looking alike.
  *
  * The leaves swing inward on a real hinge and are clipped by the opening they
@@ -426,7 +426,7 @@ function Tor({ names, m, theme, heroImage, film, filmPoster, filmMobile, filmMob
 
   // Which cut a screen gets. Resolved on the client, because the server has
   // no viewport: null until then, which is why nothing is decoded or loaded
-  // on the first pass. It follows a rotation, but never mid-play — swapping
+  // on the first pass. It follows a rotation, but never mid-play, swapping
   // the source out from under a running clip would restart it.
   const [portrait, setPortrait] = useState<boolean | null>(null);
   useEffect(() => {
@@ -478,7 +478,7 @@ function Tor({ names, m, theme, heroImage, film, filmPoster, filmMobile, filmMob
     setDone(true);
     setDragging(false);
     // A supplied clip is the invitation's opening rather than decoration, so
-    // it runs for everyone — before the reduced-motion bail, not after it.
+    // it runs for everyone, before the reduced-motion bail, not after it.
     // Someone who asked their system for less movement still gets the film;
     // what they would otherwise get is a half-second flash to the page
     // background, which is not obviously the kinder of the two.
@@ -535,7 +535,7 @@ function Tor({ names, m, theme, heroImage, film, filmPoster, filmMobile, filmMob
     if (!dragging || done) return;
     setDragging(false);
     // A press that never travelled is a tap, and a tap anywhere on the gate
-    // opens it — the whole door is the target, which is what everyone tries
+    // opens it, the whole door is the target, which is what everyone tries
     // first and what the hint has always promised. Only a deliberate part-way
     // drag that is then released short snaps shut again.
     if (openRef.current > 0.34 || openRef.current < 0.03) complete();
@@ -556,7 +556,7 @@ function Tor({ names, m, theme, heroImage, film, filmPoster, filmMobile, filmMob
           {/* Sized and fitted identically to the video, so the two are pixel
               identical and the first painted frame lands on top of its own
               still without a flicker. The picture element picks the cut with
-              no script, so the very first paint is already the right aspect —
+              no script, so the very first paint is already the right aspect, 
               the video's own src cannot be, and follows on the client. */}
           <picture>
             {filmMobilePoster && (
@@ -582,13 +582,13 @@ function Tor({ names, m, theme, heroImage, film, filmPoster, filmMobile, filmMob
           <span className="tor-floor" />
         </div>
 
-        {/* What lies beyond, clipped to the opening — so the photograph is
+        {/* What lies beyond, clipped to the opening, so the photograph is
             only ever seen through the doorway, never as a backdrop the
             leaves happen to sit on. */}
         <div className="tor-portal">
           {/* The ceremony, seen through the doorway: the aisle running back to
               the altar, blossom trained over it, and the couple mounted at the
-              centre the same way the cover mounts them — so the plate the gate
+              centre the same way the cover mounts them, so the plate the gate
               ends on and the plate the cover opens on are one object. */}
           <div className="tor-altar">
             <span className="tor-aisle" />

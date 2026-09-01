@@ -1,7 +1,7 @@
 # Read by `vercel` CLI deploys. Git-connected deploys clone the repository and
 # ignore this file, so nothing here is load-bearing for the build either way.
 #
-# media/ is 28 MB of opener masters — the 10s source clips and the stills they
+# media/ is 28 MB of opener masters, the 10s source clips and the stills they
 # were generated from. The cut that actually ships lives in public/beispiel.
 media
 

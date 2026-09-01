@@ -22,7 +22,7 @@ To persist, copy `.env.example` to `.env.local`, create a Supabase project, run
 
 ## For venues, not only couples
 
-An invitation belongs to an **organisation** — a hall or a planner — not to a
+An invitation belongs to an **organisation**, a hall or a planner, not to a
 login. `src/lib/org.ts` creates one on first use, its details land at the foot
 of every invitation it publishes, and `PLAN_QUOTA` in `src/lib/types.ts` is
 what "unlimited" means on the Profi tier.
@@ -31,7 +31,7 @@ what "unlimited" means on the Profi tier.
 household holds its own link (`/slug?g=token`) and a seat allowance. The RSVP
 route clamps a reply to that allowance and keeps one row per household, so a
 second reply corrects the first instead of inflating the total. Without a guest
-list the public form still works — it just is not a number anyone should buy
+list the public form still works, it just is not a number anyone should buy
 food against.
 
 **Reminders are computed, not queued**, counting back 14 and 7 days from the
@@ -50,7 +50,7 @@ the same component.
 
 **A theme is a token bundle, not a template.** `src/lib/themes.ts` holds eight
 themes as palette + type pairing + ornament + surface + motion. Adding a ninth
-is a data change — it appears in the picker, the renderer, and the OG image with
+is a data change, it appears in the picker, the renderer, and the OG image with
 no other edit. Four openers (veil, foil, envelope, direct) compose with all
 eight, giving 32 first impressions from one layout and one set of translations.
 
@@ -82,11 +82,11 @@ in-memory demo store. To run a production build locally, opt in explicitly:
 
 **Supabase free-tier projects pause after about seven days of inactivity.** A
 published invitation has to stay reachable for months. This needs the paid tier
-or a keep-alive — it is an operations problem, not a code one.
+or a keep-alive, it is an operations problem, not a code one.
 
 **GDPR.** RSVPs collect names and guest counts from EU residents. The RSVP form
 carries a privacy notice, deletion cascades when an invitation is deleted, and
-`purge_old_guest_data()` clears responses 90 days after the last event — but it
+`purge_old_guest_data()` clears responses 90 days after the last event, but it
 needs scheduling with pg_cron (the invocation is in `supabase/schema.sql`).
 
 ## Not built

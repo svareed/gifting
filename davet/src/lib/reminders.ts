@@ -12,15 +12,15 @@ const TEMPLATE: Record<Locale, (v: {
 }) => string> = {
   de: (v) =>
     `Liebe ${v.household}, wir freuen uns sehr auf die Hochzeit von ${v.couple}. ` +
-    `In ${v.days} Tagen brauchen wir eure Rückmeldung — es dauert keine Minute: ${v.link}` +
+    `In ${v.days} Tagen brauchen wir eure Rückmeldung, es dauert keine Minute: ${v.link}` +
     (v.venue ? `\n\n${v.venue}` : ""),
   tr: (v) =>
     `Sayın ${v.household}, ${v.couple} çiftinin düğününü sabırsızlıkla bekliyoruz. ` +
-    `${v.days} gün içinde yanıtınıza ihtiyacımız var — bir dakika bile sürmez: ${v.link}` +
+    `${v.days} gün içinde yanıtınıza ihtiyacımız var, bir dakika bile sürmez: ${v.link}` +
     (v.venue ? `\n\n${v.venue}` : ""),
   en: (v) =>
     `Dear ${v.household}, we are looking forward to ${v.couple}'s wedding. ` +
-    `We need your reply in ${v.days} days — it takes less than a minute: ${v.link}` +
+    `We need your reply in ${v.days} days, it takes less than a minute: ${v.link}` +
     (v.venue ? `\n\n${v.venue}` : ""),
 };
 

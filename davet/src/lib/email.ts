@@ -1,6 +1,6 @@
 /**
- * Email delivery, if it is configured. Davet is useful without it — the
- * WhatsApp path is click-to-send and needs no provider at all — so a missing
+ * Email delivery, if it is configured. Davet is useful without it, the
+ * WhatsApp path is click-to-send and needs no provider at all, so a missing
  * key is a state to report, never a crash.
  *
  * RESEND_API_KEY and REMINDER_FROM turn this on.

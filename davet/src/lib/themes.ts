@@ -15,14 +15,14 @@ export type Motion = "veil" | "fade-rise" | "none";
  * How the display face is set. One named decision rather than four loose knobs,
  * because these only ever move together: a title-case serif wants a tight fit,
  * an italic ampersand and a foil sheen across the letterforms, while tracked
- * caps want air, an upright ampersand and flat ink — a theme whose accent is
+ * caps want air, an upright ampersand and flat ink, a theme whose accent is
  * ink rather than a metal has no foil to catch the light.
  */
 export type Lettering = "titlecase" | "tracked-caps";
 
 /**
  * Whether content sits inside framed cards or directly on the ground. "open"
- * is the editorial treatment: no boxes, no tiles, no pills — separation is
+ * is the editorial treatment: no boxes, no tiles, no pills: separation is
  * space and hairlines only. Boxes are what make a page read as a web form
  * rather than as print, so this is the single biggest lever on how expensive
  * an invitation looks.

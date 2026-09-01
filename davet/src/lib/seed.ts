@@ -16,7 +16,7 @@ const SEED_TEXT: Record<
   en: {
     a: "Amir",
     b: "Leyla",
-    weather: "Warm and dry, with cool evenings — a light shawl is a good idea.",
+    weather: "Warm and dry, with cool evenings. A light shawl is a good idea.",
     dress: "Traditional or elegant formal wear is warmly encouraged.",
     parking: "On-site parking is available. Arriving a little early is recommended.",
     note1: "Nikah, followed by lunch",
@@ -27,7 +27,7 @@ const SEED_TEXT: Record<
   de: {
     a: "Amir",
     b: "Leyla",
-    weather: "Warm und trocken, abends kühl — ein leichter Schal lohnt sich.",
+    weather: "Warm und trocken, abends kühl. Ein leichter Schal lohnt sich.",
     dress: "Traditionelle oder elegante festliche Kleidung ist herzlich willkommen.",
     parking: "Parkplätze sind vor Ort vorhanden. Etwas früher da zu sein, lohnt sich.",
     note1: "Nikah, anschliessend Mittagessen",
@@ -38,7 +38,7 @@ const SEED_TEXT: Record<
   tr: {
     a: "Amir",
     b: "Leyla",
-    weather: "Sıcak ve kuru, akşamları serin — ince bir şal iyi olur.",
+    weather: "Sıcak ve kuru, akşamları serin. İnce bir şal iyi olur.",
     dress: "Geleneksel ya da şık resmî kıyafet memnuniyetle karşılanır.",
     parking: "Mekânda otopark mevcuttur. Biraz erken gelmenizi öneririz.",
     note1: "Nikâh, ardından öğle yemeği",
@@ -75,7 +75,7 @@ const SEED_VALUES: ReadonlySet<string> = new Set(
 
 /**
  * A field still holding example text. A couple genuinely called Amir gets the
- * mark too — which is why it reads as an offer to clear the field rather than
+ * mark too, which is why it reads as an offer to clear the field rather than
  * as a warning, and why `blank: true` exists for people who would rather start
  * from nothing.
  */

@@ -602,7 +602,7 @@ export function Builder({
                   setTimeout(() => setCopied(false), 1500);
                 }).catch(() => {});
               }}>{copied ? m.b.copied : m.b.copyLink}</button>
-              <a href={`https://wa.me/?text=${encodeURIComponent(`${invite.partnerAName} & ${invite.partnerBName} — ${url}`)}`}
+              <a href={`https://wa.me/?text=${encodeURIComponent(`${invite.partnerAName} & ${invite.partnerBName}: ${url}`)}`}
                  target="_blank" rel="noopener noreferrer">{m.b.shareWhatsapp}</a>
             </div>
           )}

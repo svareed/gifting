@@ -4,8 +4,8 @@ import type { Invite } from "./types";
  * Fields entered early flow downstream until someone overrides them.
  *
  * A family's person name follows the matching couple field for as long as the
- * two agree. The moment someone types something different there — a full name,
- * a different spelling — the link is broken and the couple field stops
+ * two agree. The moment someone types something different there, a full name,
+ * a different spelling, the link is broken and the couple field stops
  * reaching it. No extra state is stored: agreement *is* the link.
  */
 export function setPartnerName(

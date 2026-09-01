@@ -13,7 +13,7 @@ export const alt = "Wedding invitation";
 /**
  * The cover photograph, inlined as bytes. ImageResponse would otherwise fetch
  * the URL itself, and a 404 or an unsupported format there fails the whole
- * route — so it is fetched here, where a failure can fall back to the
+ * route, so it is fetched here, where a failure can fall back to the
  * type-only card instead of a broken preview.
  *
  * This card is the first thing almost every guest sees, because almost every
@@ -24,8 +24,8 @@ const OG_IMAGE_TYPES = ["image/jpeg", "image/png"];
 
 /**
  * The display face per theme. Satori has no access to the browser's font
- * stack, so without this the share card — the first thing almost every guest
- * sees — sets the couple's names in whatever sans the renderer defaults to,
+ * stack, so without this the share card, the first thing almost every guest
+ * sees, sets the couple's names in whatever sans the renderer defaults to,
  * on every theme. next/font's copies live in the build output under hashed
  * names, so the files are vendored instead.
  */

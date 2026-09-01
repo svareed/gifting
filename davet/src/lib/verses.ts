@@ -27,8 +27,8 @@ export const VERSE_LIBRARY: LibraryVerse[] = [
       tr: "Rûm Sûresi · 30:21",
     },
     text: {
-      en: "Among His signs is that He created for you, from yourselves, mates so that you may find peace in them — and He placed between you love and mercy.",
-      de: "Zu Seinen Zeichen gehört, dass Er euch aus euch selbst Gefährten erschuf, damit ihr bei ihnen Ruhe findet — und Er legte zwischen euch Liebe und Barmherzigkeit.",
+      en: "Among His signs is that He created for you, from yourselves, mates so that you may find peace in them, and He placed between you love and mercy.",
+      de: "Zu Seinen Zeichen gehört, dass Er euch aus euch selbst Gefährten erschuf, damit ihr bei ihnen Ruhe findet, und Er legte zwischen euch Liebe und Barmherzigkeit.",
       tr: "O'nun ayetlerinden biri de, kendilerinde huzur bulasınız diye size kendi türünüzden eşler yaratması ve aranıza sevgi ve merhamet koymasıdır.",
     },
   },
@@ -58,9 +58,9 @@ export const VERSE_LIBRARY: LibraryVerse[] = [
       tr: "Bakara Sûresi · 2:187",
     },
     text: {
-      en: "They are a garment for you, and you are a garment for them — each shielding, comforting and completing the other.",
-      de: "Sie sind ein Gewand für euch, und ihr seid ein Gewand für sie — einander Schutz, Trost und Ergänzung.",
-      tr: "Onlar size örtüdür, siz de onlara örtüsünüz — birbirinizi koruyan, avutan ve tamamlayan.",
+      en: "They are a garment for you, and you are a garment for them, each shielding, comforting and completing the other.",
+      de: "Sie sind ein Gewand für euch, und ihr seid ein Gewand für sie, einander Schutz, Trost und Ergänzung.",
+      tr: "Onlar size örtüdür, siz de onlara örtüsünüz, birbirinizi koruyan, avutan ve tamamlayan.",
     },
   },
   {
@@ -207,9 +207,9 @@ export const VERSE_LIBRARY: LibraryVerse[] = [
       tr: "Johann Wolfgang von Goethe · Faust I",
     },
     text: {
-      en: "Stay a while — you are so beautiful.",
+      en: "Stay a while, you are so beautiful.",
       de: "Verweile doch, du bist so schön.",
-      tr: "Dur bir an — ne kadar güzelsin.",
+      tr: "Dur bir an, ne kadar güzelsin.",
     },
   },
   {
@@ -259,7 +259,7 @@ export const VERSE_LIBRARY: LibraryVerse[] = [
     original: null,
     ref: { en: "Wilhelm Busch", de: "Wilhelm Busch", tr: "Wilhelm Busch" },
     text: {
-      en: "If you would be happy in life, add to the happiness of others — for the joy we give returns to our own heart.",
+      en: "If you would be happy in life, add to the happiness of others, for the joy we give returns to our own heart.",
       de: "Willst du glücklich sein im Leben, trage bei zu andrer Glück, denn die Freude, die wir geben, kehrt ins eigne Herz zurück.",
       tr: "Hayatta mutlu olmak istiyorsan başkalarının mutluluğuna katkıda bulun; çünkü verdiğimiz sevinç kendi kalbimize döner.",
     },

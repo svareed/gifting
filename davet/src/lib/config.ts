@@ -20,7 +20,7 @@ export const SITE_URL = resolveSiteUrl();
 
 /**
  * Who operates the service. German law requires this on every page that is
- * publicly reachable — an invitation included — and a missing Impressum is
+ * publicly reachable, an invitation included, and a missing Impressum is
  * not a rough edge but an abmahnfähig offence under §5 DDG. Kept in the
  * environment so a self-hoster fills it in once rather than editing code.
  *

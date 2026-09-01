@@ -60,7 +60,7 @@ export function GuestList({
     },
   ]);
 
-  /** "Familie Yilmaz, 4, mail@x.de, +49…" — one household per line. */
+  /** "Familie Yilmaz, 4, mail@x.de, +49…", one household per line. */
   function importCsv(text: string) {
     const rows = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
     const parsed = rows.map((line, i) => {

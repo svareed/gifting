@@ -8,8 +8,8 @@ import type { Locale } from "./types";
  * interface chrome: they are documents, they are long, and they change for
  * legal reasons rather than for product ones.
  *
- * The German text is the authoritative one — it is German law that requires
- * these — and the other two are translations offered as a courtesy.
+ * The German text is the authoritative one, it is German law that requires
+ * these, and the other two are translations offered as a courtesy.
  *
  * Everything the privacy notice claims is checked against what the code
  * actually does: an RSVP stores a name, a yes or no, a headcount and an
@@ -142,7 +142,7 @@ function privacyEn(): LegalDoc {
       {
         heading: "Purpose and legal basis",
         body: [
-          "Your reply is processed so the couple can plan. The legal basis is Art. 6(1)(b) GDPR where a contract exists, and otherwise Art. 6(1)(f) GDPR — the hosts' legitimate interest in a reliable headcount.",
+          "Your reply is processed so the couple can plan. The legal basis is Art. 6(1)(b) GDPR where a contract exists, and otherwise Art. 6(1)(f) GDPR, the hosts' legitimate interest in a reliable headcount.",
           "Abuse prevention rests on Art. 6(1)(f) GDPR, the legitimate interest in operating the service safely.",
         ],
       },
@@ -212,7 +212,7 @@ function privacyTr(): LegalDoc {
       {
         heading: "Amaç ve hukuki dayanak",
         body: [
-          "Yanıtınız, çiftin planlama yapabilmesi için işlenir. Sözleşme ilişkisi bulunduğunda hukuki dayanak GDPR m. 6(1)(b), aksi hâlde GDPR m. 6(1)(f) — ev sahiplerinin güvenilir bir misafir sayısına ilişkin meşru menfaatidir.",
+          "Yanıtınız, çiftin planlama yapabilmesi için işlenir. Sözleşme ilişkisi bulunduğunda hukuki dayanak GDPR m. 6(1)(b), aksi hâlde GDPR m. 6(1)(f), ev sahiplerinin güvenilir bir misafir sayısına ilişkin meşru menfaatidir.",
           "Kötüye kullanımın önlenmesi, hizmetin güvenli işletilmesine ilişkin meşru menfaate, GDPR m. 6(1)(f)'ye dayanır.",
         ],
       },

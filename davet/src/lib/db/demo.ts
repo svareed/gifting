@@ -95,7 +95,7 @@ const TZ = "Europe/Berlin";
  * data must not carry a real company's name. This is one prospect's pitch,
  * so it lives with the demo data and is swapped per prospect.
  *
- * PLACEHOLDER — replace `website` and `phone` with the studio's real details
+ * PLACEHOLDER: replace `website` and `phone` with the studio's real details
  * before sending this link to anyone.
  */
 const PITCH_STUDIO = {
@@ -126,7 +126,7 @@ function studioExample(orgId: string): Invite {
   });
   // A fixed date rather than a rolling one: this example is the pitch, and the
   // pitch names a day. The countdown therefore runs out on 15.12.2026 and the
-  // example reads as a past wedding after that — move the year when it does.
+  // example reads as a past wedding after that. Move the year when it does.
   const year = 2026;
   const at = (wall: string) => wallTimeToUtcIso(`${year}-${wall}`, TZ);
 
@@ -145,7 +145,7 @@ function studioExample(orgId: string): Invite {
   inv.openerFilmPoster = "/beispiel/tor-poster.jpg";
   inv.openerFilmMobile = "/beispiel/tor-mobile.mp4";
   inv.openerFilmMobilePoster = "/beispiel/tor-mobile-poster.jpg";
-  // brand: the studio's wordmark above the photograph and on the frame — the
+  // brand: the studio's wordmark above the photograph and on the frame, the
   // whole reason a supplier pays for this rather than sending a PDF.
   inv.sections = { ...inv.sections, info: true, music: false, brand: true, blossom: true };
   inv.rsvpDeadline = `${year}-11-15`;
@@ -154,11 +154,11 @@ function studioExample(orgId: string): Invite {
   inv.organizerPhone = PITCH_STUDIO.phone;
 
   inv.infoWeather =
-    "Mitte Dezember an der Elbe: kalt und oft windig — Mantel, Schal und warme Schuhe "
+    "Mitte Dezember an der Elbe: kalt und oft windig. Mantel, Schal und warme Schuhe "
     + "für den Weg zwischen den Häusern.";
   inv.infoDress =
-    "Festlich, gern in gedämpften Tönen. Drinnen ist es warm, draußen nicht — "
-    + "etwas zum Überziehen für den Übergang.";
+    "Festlich, gern in gedämpften Tönen. Drinnen ist es warm, draußen nicht. "
+    + "Etwas zum Überziehen für den Übergang.";
   inv.infoParking =
     "Auf dem Gut gibt es Parkplätze. Ab 17:30 Uhr fährt ein Shuttle zum Elbspeicher und später zurück.";
 
@@ -189,7 +189,7 @@ function studioExample(orgId: string): Invite {
       customName: "Paarshooting zur blauen Stunde",
       venueName: "Elbstrand Övelgönne", venueAddress: "Hamburg-Othmarschen",
       mapsUrl: "", startsAt: at("12-15T16:15"),
-      note: "Wir sind eine Stunde weg — tanzt bitte weiter",
+      note: "Wir sind eine Stunde weg, tanzt bitte weiter",
     },
   ];
 

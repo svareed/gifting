@@ -24,7 +24,7 @@ export type OpenerId = (typeof OPENER_IDS)[number];
 
 /**
  * Chooses the quote library and the quote section's heading. "secular" is not
- * an absence of tradition — it is the German default: most couples marrying
+ * an absence of tradition: it is the German default: most couples marrying
  * here want a line from a film or a poem, not scripture, and until this existed
  * they had to type one in by hand.
  */
@@ -125,7 +125,7 @@ export type Invite = {
   rsvpDeadline: string | null;
   /**
    * Whoever is putting the day on. Rendered at the foot of the invitation,
-   * where every guest ends up — which is the whole point for a venue paying
+   * where every guest ends up, which is the whole point for a venue paying
    * for the tool.
    */
   organizerName: string;
@@ -167,7 +167,7 @@ export const PLAN_QUOTA: Record<Plan, number> = {
 /**
  * The venue or planner the invitations belong to. Every invitation hangs off
  * one, so branding, quota and billing have somewhere to live that is not an
- * individual login — which is what "unlimited for the hall" has to mean.
+ * individual login, which is what "unlimited for the hall" has to mean.
  */
 export type Organization = {
   id: string;

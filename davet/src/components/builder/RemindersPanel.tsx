@@ -16,7 +16,7 @@ export type DueRow = {
 /**
  * WhatsApp has no server-side send without the Business API, and a venue with
  * sixty weddings a year is not going to apply for one. Click-to-send is what
- * they already do by hand — this just writes the message and keeps the score.
+ * they already do by hand, this just writes the message and keeps the score.
  */
 export function RemindersPanel({ rows, m }: { rows: DueRow[]; m: Messages }) {
   const router = useRouter();

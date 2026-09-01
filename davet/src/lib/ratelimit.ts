@@ -15,7 +15,7 @@ export async function withinRateLimit(
   limit: number,
   windowMs: number,
 ): Promise<boolean> {
-  // No address to attribute — the honeypot and published-only checks still apply.
+  // No address to attribute, the honeypot and published-only checks still apply.
   if (!ipHash) return true;
 
   const sinceIso = new Date(Date.now() - windowMs).toISOString();

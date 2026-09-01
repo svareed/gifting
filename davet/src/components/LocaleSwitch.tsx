@@ -7,7 +7,7 @@ import { LOCALES, type Locale } from "@/lib/types";
 /**
  * Writes the cookie, then refreshes so the server re-renders every string on
  * the page in the new language. A client-side dictionary swap would leave the
- * server-rendered half — titles, metadata, the invitation itself — behind.
+ * server-rendered half (titles, metadata, the invitation itself) behind.
  */
 export function LocaleSwitch({ value, label }: { value: Locale; label: string }) {
   const router = useRouter();

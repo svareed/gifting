@@ -432,7 +432,7 @@ body.app {
 
 /* ------------------------------------------------------------ pages ----- */
 .page { width: min(100% - 2.5rem, 60rem); margin-inline: auto; padding-block: 3rem 5rem; }
-/* German compounds — "Hochzeitseinladungen" — are a single unbreakable word
+/* German compounds like "Hochzeitseinladungen" are a single unbreakable word
    at 320px unless hyphenation is allowed. <html lang> is set, so it works. */
 .page h1 {
   font-family: var(--f-cormorant), Georgia, serif; font-weight: 400;
@@ -626,7 +626,7 @@ body.app {
   /* `center`, not `start`: the band sits in the middle of the column, so the
      offset that centres a row is what we scroll to. With `start` that offset
      is not a snap point for the first two rows, and the browser quietly
-     re-snapped them a row down — one column landing off its neighbours. */
+     re-snapped them a row down, one column landing off its neighbours. */
   height: 36px; line-height: 36px; scroll-snap-align: center;
   font-size: .95rem; color: var(--app-muted);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -768,7 +768,7 @@ body.app {
   text-shadow: 0 1px 10px rgba(0, 0, 0, .55);
 }
 /* The dot rail runs down the same edge the wordmark sits on, and being fixed
-   over the page it reserves nothing — so wherever the rail is shown the mark
+   over the page it reserves nothing, so wherever the rail is shown the mark
    has to step in past it. Below 22rem the rail is hidden and the mark keeps
    the tighter corner, and the builder preview hides the rail too. */
 @media (min-width: 22.0625rem) {
@@ -788,7 +788,7 @@ body.app {
 .print-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ======================================================== open chrome ==== */
-/* No boxes, no tiles, no pills — separation is space and hairlines only.
+/* No boxes, no tiles, no pills: separation is space and hairlines only.
    Boxes are what make a page read as a web form rather than as print, so this
    is the whole difference between "a website" and "an invitation". Scoped to
    the attribute, so the eight framed themes are untouched. */
@@ -915,7 +915,7 @@ body.app {
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
 
   /* Foil lettering paints the glyphs transparent over a gradient, and
-     gradients are backgrounds — which browsers do not print. Without this the
+     gradients are backgrounds, which browsers do not print. Without this the
      couple's names come out invisible. */
   .gilt {
     background: none !important;
@@ -1000,7 +1000,7 @@ body.app {
  * sets `--open` directly with transitions off, the tap transitions it to 1.
  *
  * On a tap the CHOREOGRAPHY is carried by each layer's own duration and delay,
- * not by the property's value — `--open` jumps to 1 at once and every layer
+ * not by the property's value: `--open` jumps to 1 at once and every layer
  * eases to its end state on its own clock. That is what staggers the beats.
  * The thresholds in the calc()s are what shape a drag, where the value really
  * does move continuously.
@@ -1035,19 +1035,19 @@ body.app {
 
 /* Everything inside the camera is scenery, so the gate itself is the only
    thing that ever receives a pointer. Without this the doorway is the drag
-   target, and dragging an <img> starts Chromium's native image drag — which
+   target, and dragging an <img> starts Chromium's native image drag, which
    fires pointercancel and kills the gesture halfway through. */
 .tor-cam { pointer-events: none; }
 .tor-photo img, .tor-couple img { -webkit-user-drag: none; user-select: none; }
 
 /* Camera. One scale on one element is the entire dolly, so walking through the
-   door costs a single composited layer rather than one per scenery piece —
+   door costs a single composited layer rather than one per scenery piece, 
    and every layer inside keeps its alignment for free. */
 .tor-cam {
   position: absolute; inset: 0; z-index: 0;
   /* Shallow enough that the doorway still frames the ceremony as a scene.
      Past about 2x the camera is already inside the altar and the arbour, the
-     aisle and the dais have all left the frame — a zoom, not a walk. */
+     aisle and the dais have all left the frame, a zoom, not a walk. */
   transform: scale(calc(1 + var(--open) * 1.55));
   transition: transform var(--door-t) var(--door-ease);
   will-change: transform;
@@ -1206,7 +1206,7 @@ body.app {
   transform: rotateY(calc(var(--open) * -88deg));
 }
 
-/* One recessed panel per leaf. A single hairline is the whole detail — two
+/* One recessed panel per leaf. A single hairline is the whole detail, two
    stacked panels and a moulded stile turn a minimal door into joinery. */
 .tor-panel {
   position: absolute; inset: 5% 12%;
@@ -1226,7 +1226,7 @@ body.app {
 
 /* -------------------------------------------------------------- the jamb -- */
 /* Drawn over the leaves, so they read as hung inside the wall. Two hairlines
-   and a cast shadow — nothing more. */
+   and a cast shadow, nothing more. */
 .tor-frame {
   z-index: 3;
   box-shadow:
@@ -1276,7 +1276,7 @@ body.app {
 /* ------------------------------------------------------------------ film -- */
 /* When a venue supplies a clip, the gate is that clip. The still underneath is
    its own first frame at the same size and object-fit, so the two are pixel
-   identical and starting playback changes nothing on screen — which is the
+   identical and starting playback changes nothing on screen, which is the
    entire reason the reference reads as an animation rather than as a video
    that began. Nothing is swapped, nothing re-lays out, so there is no seam. */
 .tor-film { position: absolute; inset: 0; z-index: 1; background: var(--bg); }
@@ -1295,7 +1295,7 @@ body.app {
 /* Where a portrait cut exists, every screen gets a file whose aspect it can
    fill, so the gate stays full-bleed throughout. Where one does not, `cover`
    on a phone would show the middle quarter of a 16:9 frame and take the doors
-   with it — so that case letterboxes on black rather than cropping. Poster and
+   with it, so that case letterboxes on black rather than cropping. Poster and
    video take the rule together, or the join between them would show. */
 @media (max-aspect-ratio: 16 / 9) {
   .tor.has-film:not(.has-film-mobile) .tor-film { background: #000; }
@@ -1313,8 +1313,8 @@ body.app {
 .tor-film-flood.is-lit { opacity: 1; }
 
 /* The CSS door draws its own leaves, so the theme's ink is guaranteed to have
-   something pale to sit on. A supplied clip is any photograph at all — here it
-   is a near-black door — and dark ink on it is not type. Over film the plate
+   something pale to sit on. A supplied clip is any photograph at all, here it
+   is a near-black door, and dark ink on it is not type. Over film the plate
    goes light and carries its own ground: a scrim wide enough to hold the names
    whether the frame under them is the door or the blown-out threshold. */
 .tor.has-film .tor-plate {
@@ -1323,7 +1323,7 @@ body.app {
 }
 /* The wordmark, the ampersand and the hint all set their own ink, so none of
    them inherit the line above. Stepped down from the names rather than all
-   pure white — the couple is what the plate is for. */
+   pure white: the couple is what the plate is for. */
 .tor.has-film .tor-mark { color: rgba(255, 255, 255, .82); }
 .tor.has-film .cover-amp { color: rgba(255, 255, 255, .78); }
 .tor.has-film .tor-hint { color: rgba(255, 255, 255, .66); }
@@ -1351,7 +1351,7 @@ body.app {
 .tor-mark { margin-bottom: clamp(1rem, 4cqw, 1.6rem); }
 /* The names have to sit within the leaves. A slender door IS the composition,
    so type running past its edges onto the wall reads as an accident rather
-   than as a choice — which is why the gate sets them smaller than the cover. */
+   than as a choice, which is why the gate sets them smaller than the cover. */
 .tor-names { font-size: clamp(1.5rem, 5.4cqw, 3rem); }
 
 /* Dragging is direct manipulation: the leaves must track the finger exactly,
@@ -1491,7 +1491,7 @@ body.app {
    ran underneath them: body copy to within a few pixels of a 30px tap target,
    and on the reply section a "Leider nicht" button directly beneath one. The
    dots are fixed over the page rather than in its flow, so nothing reserves
-   that strip — the gutter has to. Widened symmetrically, because these
+   that strip: the gutter has to. Widened symmetrically, because these
    sections are centred and an asymmetric inset moves the optical centre off
    the page's own; the dots give back what the gutter takes by sitting flush
    to the edge. Above 40rem the measure caps at 34rem and clears them anyway. */

@@ -2,7 +2,7 @@
 
 The `tor` gate can play a pre-rendered clip instead of drawing the door in CSS.
 This is how the reference invitation (ahsanwedsafra.vercel.app) does it, and it
-is the only way to get a photographic look — theirs is a 7.01s, 2160×3840 clip,
+is the only way to get a photographic look, theirs is a 7.01s, 2160×3840 clip,
 not CSS.
 
 The whole trick is that **frame 0 of the clip IS the static first screen**. The
@@ -20,11 +20,11 @@ click. That is the one thing that must be exact.
 Black and white throughout. A pair of tall dark double doors, shut, with a
 blade of light escaping the seam and the blurred shadows of moving figures
 crossing it. On click the doors open and the camera pushes through into a
-wedding reception in full swing — guests dancing, laughing, wine glasses
-raised — moving between the dancers close enough to read their faces.
+wedding reception in full swing, guests dancing, laughing, wine glasses
+raised, moving between the dancers close enough to read their faces.
 
 Monochrome is not only taste: it matches the Atelier Blanc / Vicioso theme, and
-it hides what generative video is worst at — skin tones, colour drift, and
+it hides what generative video is worst at, skin tones, colour drift, and
 saturation shifts between frames.
 
 ## 1. Generate the still first, then animate it
@@ -32,7 +32,7 @@ saturation shifts between frames.
 Do **not** ask a text-to-video model for the whole thing in one go. Most will
 drift on the opening frame, and then the poster can never match.
 
-1. Generate the **still** of the closed door (§4). Iterate until you love it —
+1. Generate the **still** of the closed door (§4). Iterate until you love it, 
    this is the first screen every guest sees.
 2. Feed that exact image into an **image-to-video** model as the init/first
    frame (Kling, Runway Gen-3, Luma, Pika, Hailuo all support it).
@@ -50,11 +50,11 @@ faces, and Kling's start-frame conditioning is the strongest for this shot.
 | Aspect | **9:16 portrait** |
 | Resolution | 1080×1920 (1440×2560 fine) |
 | Frame rate | 30fps (24 acceptable) |
-| Container / codec | **MP4, H.264, `yuv420p`** — needed for Safari and iOS |
+| Container / codec | **MP4, H.264, `yuv420p`**: needed for Safari and iOS |
 | Audio | **None.** Strip the track entirely |
 | Target size | **under 4 MB** (it is preloaded before the gate is usable) |
 | Ending | **Does not need to end on white.** The bloom that covers the handover is a CSS layer over the film |
-| First frame | Sharp, static, no motion blur — it is the poster |
+| First frame | Sharp, static, no motion blur: it is the poster |
 | Text | **None.** The names and button are live HTML drawn over the film |
 
 ```bash
@@ -64,7 +64,7 @@ ffmpeg -i tor.mp4 -vf "select=eq(n\,0)" -vframes 1 -q:v 2 tor-poster.jpg
 ```
 
 Always extract the poster **from the finished clip**, never from the original
-still — that way it matches whatever the model actually produced.
+still, that way it matches whatever the model actually produced.
 
 ## 3. Where the files go
 
@@ -82,11 +82,11 @@ inv.openerFilmPoster = "/beispiel/tor-poster.jpg";
 ```
 
 Both fields are optional on the `Invite` type. Any invite without them falls
-back to the CSS door — nothing else has to change. For real customers these
+back to the CSS door, nothing else has to change. For real customers these
 would come from the same upload path as `heroImage`; that needs a Supabase
 column and a migration, which is not done yet.
 
-## 4. Prompt — the still
+## 4. Prompt: the still
 
 ```
 Black and white photograph. Wide, symmetrical, straight-on shot of a pair of
@@ -106,10 +106,10 @@ colour, colours, text, watermark, logo, caption, people in foreground, clutter,
 low contrast, flat lighting, tilted horizon
 ```
 
-The blurred shadows crossing the light are the important detail — they promise
+The blurred shadows crossing the light are the important detail, they promise
 the party before the doors move.
 
-## 4b. Prompt — the last frame
+## 4b. Prompt: the last frame
 
 Veo conditions on a *first* frame only, so this one is usually a target you
 describe in words rather than an input you pass. Generate it anyway: it settles
@@ -135,7 +135,7 @@ extra fingers, deformed hands, warped mouths, static shot, slideshow, jump cut,
 strobing, speed ramp, tilted horizon
 ```
 
-## 5. Prompt — the motion
+## 5. Prompt: the motion
 
 ```
 Start exactly on this frame. The doors swing open inward and the camera pushes
@@ -170,10 +170,10 @@ Timing to aim for across the 3 seconds:
 
 **Never name an ethnic group.** "Europeans" is almost certainly what got Veo to
 refuse. Naming a demographic is a request most models flag. Say "a European
-venue", "black tie", "a grand ballroom" — the setting and wardrobe give the
+venue", "black tie", "a grand ballroom", the setting and wardrobe give the
 same look with nothing for the filter to catch.
 
-**"Dolly zoom" is the Vertigo effect** — dolly in while zooming out, so the
+**"Dolly zoom" is the Vertigo effect**, dolly in while zooming out, so the
 background warps. It reads as unease, not celebration. The prompt above asks
 for a straight dolly push-in, which is what this shot wants.
 
@@ -182,7 +182,7 @@ for a straight dolly push-in, which is what this shot wants.
 - **It takes a first frame, not a last one.** §4 is the input image; §4b is a
   target the motion prompt has to describe in words. That is why §5 ends with
   "ends among them, close to their faces".
-- **Veo generates audio.** The gate needs none — `-an` in the encode strips it.
+- **Veo generates audio.** The gate needs none, `-an` in the encode strips it.
 - **Check the aspect you actually get.** Veo often returns 16:9 and its 9:16
   support varies by surface. This decides §7: 9:16 wants a centred portrait
   stage on desktop, 16:9 wants full-bleed desktop and a different treatment on
@@ -194,7 +194,7 @@ for a straight dolly push-in, which is what this shot wants.
 
 The gate is currently **full-bleed**, and `object-fit: cover` crops hard when
 the clip's aspect and the screen's disagree. A 9:16 clip on a 1280×800 desktop
-shows only the middle ~35% of its height — the dance floor would be cropped
+shows only the middle ~35% of its height, the dance floor would be cropped
 away.
 
 The reference avoids this by never being full-bleed: it plays inside a centred

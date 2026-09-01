@@ -7,7 +7,7 @@ import type { Locale } from "@/lib/types";
  * every other platform something different, so the one control that sets an
  * RSVP deadline behaves the same everywhere it is opened.
  *
- * The value is a plain calendar date, "YYYY-MM-DD" — no instant, no zone. A
+ * The value is a plain calendar date, "YYYY-MM-DD", no instant, no zone. A
  * deadline is a day on a wall calendar, not a moment, which is also why this
  * never goes near lib/datetime: there is nothing to convert.
  */
@@ -83,7 +83,7 @@ function Wheel({
     settle.current = setTimeout(() => {
       const el = ref.current;
       if (!el) return;
-      // Whichever row is nearest the band wins — same basis as offsetFor, so
+      // Whichever row is nearest the band wins, same basis as offsetFor, so
       // reading back a position always agrees with writing one.
       let best = 0;
       let bestGap = Infinity;

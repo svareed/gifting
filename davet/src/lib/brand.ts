@@ -1,5 +1,5 @@
 /**
- * The placeholder venue used wherever the product needs an example brand — the
+ * The placeholder venue used wherever the product needs an example brand, the
  * seeded invitation, a new organisation's name, screenshots. Deliberately a
  * plausible-but-invented German hall rather than a real business: seed data
  * that carries a real company's name is impersonation the moment anyone
@@ -21,8 +21,8 @@ export const EXAMPLE_VENUE = {
 /**
  * The placeholder studio, for the same reason and under the same rule: a
  * plausible-but-invented German name that belongs to nobody. Photographers and
- * planners are the other half of this product's buyers — they resell the
- * invitation with the shoot — and a hall's example does not show them
+ * planners are the other half of this product's buyers, they resell the
+ * invitation with the shoot, and a hall's example does not show them
  * anything, so they get their own.
  */
 export const EXAMPLE_STUDIO = {

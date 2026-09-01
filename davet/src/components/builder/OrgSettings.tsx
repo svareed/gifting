@@ -12,7 +12,7 @@ export function OrgSettings({
   org: Organization;
   m: Messages;
   /**
-   * "davet.de" — the address is built here rather than passed as a callback,
+   * "davet.de", the address is built here rather than passed as a callback,
    * because a function cannot cross the server-to-client boundary.
    */
   hostSuffix: string;

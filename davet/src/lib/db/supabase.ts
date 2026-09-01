@@ -9,7 +9,7 @@ import { reminderAnchor } from "./demo";
 
 /**
  * Server-only. Holds the service role, so every query filters on owner_id
- * explicitly — the checks in this file are the enforcement, and the RLS
+ * explicitly, the checks in this file are the enforcement, and the RLS
  * policies in supabase/schema.sql are the second line of defence covering
  * anything that reaches PostgREST with the anon key.
  */

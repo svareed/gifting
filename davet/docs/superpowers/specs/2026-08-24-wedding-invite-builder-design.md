@@ -1,4 +1,4 @@
-# Davet — Wedding Invitation Builder
+# Davet: Wedding Invitation Builder
 
 **Date:** 2026-08-24
 **Status:** Approved, in implementation
@@ -27,7 +27,7 @@ couple must fill in themselves.
 |---|---|---|
 | Publishing | One Next.js app, `/[slug]` renders from DB | Per-couple Vercel projects; static HTML export |
 | i18n | Chrome labels translated; couple's own text typed once | Guest-side switcher; machine translation |
-| Backend | Supabase — Postgres, magic-link auth, storage, RLS | Neon + Auth.js; Convex |
+| Backend | Supabase: Postgres, magic-link auth, storage, RLS | Neon + Auth.js; Convex |
 | Layout | One scroll structure | Multiple templates; template marketplace |
 | Style | 8 themes x 4 openers, theme = token bundle | 3 palettes only |
 | Photos | Hero photo + invite card | None; full gallery |
@@ -40,9 +40,9 @@ couple must fill in themselves.
 
 `<Invite data={...} />` renders the invitation. It is used by:
 
-- `/[slug]` — the public page
-- `/preview/[id]` — owner-only draft render
-- the builder's live preview — same component in an iframe at phone width
+- `/[slug]`: the public page
+- `/preview/[id]`: owner-only draft render
+- the builder's live preview, same component in an iframe at phone width
 
 Preview fidelity is therefore structural, not a feature to maintain. The
 preview cannot drift from the published page because they are the same code.

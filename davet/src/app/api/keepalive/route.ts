@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 /**
  * Supabase pauses a free-tier project after roughly a week without activity,
  * which would take every published invitation offline mid-engagement. One
- * cheap read a day keeps the project marked active — see vercel.json.
+ * cheap read a day keeps the project marked active, see vercel.json.
  */
 export async function GET(req: Request) {
   const secret = process.env.CRON_SECRET;

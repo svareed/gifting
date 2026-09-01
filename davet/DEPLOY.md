@@ -6,7 +6,7 @@ couples.
 
 ## 1. Supabase
 
-1. Create a project at supabase.com. Note its region — pick one near your guests.
+1. Create a project at supabase.com. Note its region, pick one near your guests.
 2. Open the SQL editor, paste all of `supabase/schema.sql`, run it.
 3. Settings → API. Copy three values:
    - Project URL → `NEXT_PUBLIC_SUPABASE_URL`
@@ -18,8 +18,8 @@ never expose it to the browser, and never give it a `NEXT_PUBLIC_` name.
 
 ## 2. Push to GitHub
 
-The remote already exists — `origin` is `https://github.com/svareed/gifting.git`
-— so this is a push, not a setup:
+The remote already exists (`origin` is `https://github.com/svareed/gifting.git`),
+so this is a push, not a setup:
 
     git push origin main
 
@@ -31,7 +31,7 @@ Next app is the `davet/` directory inside it. That single fact decides step 3.
 1. vercel.com → Add New → Project → import the repository.
 2. **Set Root Directory to `davet`.** Vercel offers this on the import screen
    and again under Settings → General. Skip it and the build fails immediately
-   with "No package.json found" — there is none at the repository root.
+   with "No package.json found", there is none at the repository root.
 3. Framework preset is then detected as Next.js. Leave the build settings alone.
 4. Add environment variables before the first deploy:
 
@@ -69,7 +69,7 @@ Skip this and magic-link sign-in sends people to localhost.
 
 - `/` loads and shows eight themes.
 - `/max-und-lena` opens: the gate plays its 3.4s film and hands over to the
-  cover. Check it on a phone as well as a laptop — the two get different cuts
+  cover. Check it on a phone as well as a laptop, the two get different cuts
   (`tor-mobile.mp4` and `tor.mp4`), chosen client-side by viewport aspect.
 - `/login` sends a magic link that returns you to `/dashboard`.
 - Create an invitation, publish it, open it in a private window.
@@ -81,13 +81,13 @@ Skip this and magic-link sign-in sends people to localhost.
 **Supabase pauses free projects after about a week of inactivity.** A published
 invitation has to stay reachable for months, so this is the one that would
 genuinely take a wedding site down. `vercel.json` schedules a daily GET to
-`/api/keepalive` — one cheap query, which is enough to keep the project marked
+`/api/keepalive`, one cheap query, which is enough to keep the project marked
 active. Vercel's Hobby plan allows one cron run per day, which is exactly what
 this uses. If you would rather not depend on that, Supabase Pro is $25/month.
 
 **Vercel's Hobby plan is for non-commercial use.** The moment Davet charges
 anyone, it needs Pro at $20/month. Confirm against Vercel's current terms
-yourself — this changes, and it is their call, not mine.
+yourself, this changes, and it is their call, not mine.
 
 **Free tier ceilings worth knowing**: Supabase gives 500 MB of database and
 50,000 monthly active users, far beyond what invitations consume. Photo uploads
@@ -108,6 +108,6 @@ two Supabase auth URLs, or previously sent links and magic links will disagree.
   Guest names and RSVP replies are personal data belonging to EU residents.
   Storing them indefinitely is the part of GDPR that is easy to get wrong.
 
-- **Test on a real iPhone.** The Safari work — `100dvh` covers, `-webkit-`
-  prefixed foil lettering, Pointer Events on the scratch opener — is written to
+- **Test on a real iPhone.** The Safari work, `100dvh` covers, `-webkit-`
+  prefixed foil lettering, Pointer Events on the scratch opener, is written to
   the documented behaviour but has never run on an actual device.
