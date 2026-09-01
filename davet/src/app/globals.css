@@ -46,12 +46,21 @@ body.app {
   font-weight: 400;
   line-height: 1.12;
   text-wrap: balance; /* Safari 17.4+; degrades harmlessly */
+  text-transform: var(--display-case, none);
+  letter-spacing: var(--display-track, -0.01em);
+  /* Tracking adds a trailing gap after the last glyph, which pulls a centred
+     line off centre. Reclaim it. Harmless where the track is negative. */
+  margin-inline-end: calc(var(--display-track, 0em) * -1);
+  /* German compounds are one unbreakable word at 320px without this, and
+     <html lang> is set, so the browser hyphenates them properly. */
+  hyphens: auto;
 }
 
 /* Surface textures ---------------------------------------------------- */
 .surface-grain::before,
 .surface-linen::before,
-.surface-marble::before {
+.surface-marble::before,
+.surface-plaster::before {
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
 }
 .surface-grain::before {
@@ -71,6 +80,17 @@ body.app {
     radial-gradient(90% 60% at 88% 22%, color-mix(in srgb, var(--accent) 10%, transparent) 0%, transparent 60%),
     radial-gradient(140% 80% at 40% 92%, color-mix(in srgb, var(--rule) 12%, transparent) 0%, transparent 58%);
 }
+/* Troweled lime rather than veined stone: broad soft mottling, no figure, so
+   a black-and-white photograph laid on top is the only thing with contrast. */
+.surface-plaster::before {
+  opacity: .75;
+  background-image:
+    radial-gradient(130% 55% at 16% 2%,  color-mix(in srgb, var(--rule) 22%, transparent) 0%, transparent 60%),
+    radial-gradient(105% 50% at 86% 26%, color-mix(in srgb, var(--rule) 14%, transparent) 0%, transparent 64%),
+    radial-gradient(150% 65% at 44% 98%, color-mix(in srgb, var(--rule) 18%, transparent) 0%, transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23p)' opacity='.2'/%3E%3C/svg%3E");
+}
+
 .invite > * { position: relative; z-index: 1; }
 
 /* Everything the renderer draws sizes against THIS box, not the window. The
@@ -100,6 +120,11 @@ body.app {
 }
 .rule::after { background: linear-gradient(90deg, var(--rule), transparent); }
 .rule svg { color: var(--accent); flex: none; }
+.rule.rule-plain {
+  display: block; height: 1px; width: min(8rem, 45%);
+  margin-inline: auto; background: var(--rule);
+}
+.rule.rule-plain::before, .rule.rule-plain::after { content: none; }
 
 /* Cover / opener ------------------------------------------------------ */
 .cover {
@@ -107,8 +132,11 @@ body.app {
   display: grid; place-items: center; text-align: center;
   padding: 2rem; position: relative;
 }
-.cover-names { font-size: clamp(2.2rem, 11cqw, 5rem); letter-spacing: -0.01em; }
-.cover-amp { color: var(--accent); font-style: italic; display: block; font-size: .55em; margin-block: .15em; }
+.cover-names { font-size: clamp(2.2rem, 11cqw, 5rem); }
+.cover-amp {
+  color: var(--accent); font-style: var(--amp-style, italic);
+  display: block; font-size: .55em; margin-block: .15em;
+}
 
 .btn {
   -webkit-appearance: none; appearance: none;
@@ -158,6 +186,27 @@ body.app {
 .invite p, .invite h1, .invite h2, .invite .display { overflow-wrap: anywhere; }
 .grid-2 { display: grid; gap: 1rem; }
 @container (min-width: 34rem) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+/* Photography --------------------------------------------------------- */
+/* The cover plate: a print in a mat, sized so the whole cover still fits a
+   phone screen alongside the names, the date and the countdown. */
+.plate {
+  margin: 0 auto clamp(1.4rem, 5cqw, 2.4rem);
+  width: min(62cqw, 21rem);
+  padding: clamp(.3rem, 1.6cqw, .55rem);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+.plate img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+/* A short or landscape window has no room for a 21rem print above the names,
+   and the cover is the one screen that must not need scrolling. */
+@media (max-height: 46rem) {
+  .plate { width: min(38cqw, 12rem); }
+}
+
+/* One frame at full width, with nothing set over it. */
+.band { margin: 0; }
+.band img { width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; }
 
 /* Arabic -------------------------------------------------------------- */
 .arabic {
@@ -269,7 +318,10 @@ body.app {
     var(--accent) 0%, color-mix(in srgb, var(--accent) 45%, #fff) 45%,
     var(--accent) 60%, color-mix(in srgb, var(--accent) 70%, #000) 100%);
   -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent; color: transparent;
+  /* Themes whose accent is ink set --gilt-fill to it, which paints the glyphs
+     flat and leaves the gradient invisible behind them. */
+  -webkit-text-fill-color: var(--gilt-fill, transparent);
+  color: var(--gilt-fill, transparent);
 }
 
 /* ------------------------------------------------- preview scoping ------ */
@@ -278,7 +330,8 @@ body.app {
 .preview-scope .cover { min-height: var(--cover-h, 100dvh); }
 .preview-scope.surface-grain::before,
 .preview-scope.surface-linen::before,
-.preview-scope.surface-marble::before { position: absolute; }
+.preview-scope.surface-marble::before,
+.preview-scope.surface-plaster::before { position: absolute; }
 .preview-scope .music-btn { position: absolute; }
 
 /* ------------------------------------------------------------ builder --- */
@@ -352,8 +405,13 @@ body.app {
 /* Preview pane ---------------------------------------------------------- */
 .b-preview { display: none; }
 .phone {
-  --cover-h: 100%;
-  width: 20rem; height: 42rem; overflow-y: auto; overflow-x: hidden;
+  --phone-h: 42rem;
+  /* A percentage would have to resolve through .invite and .invite-body, both
+     of which are auto-height, so it collapses to nothing and the opener ends
+     up a short band across the top of the frame. A length always resolves.
+     Border-box, so the renderer's viewport is the frame less its bezel. */
+  --cover-h: calc(var(--phone-h) - 20px);
+  width: 20rem; height: var(--phone-h); overflow-y: auto; overflow-x: hidden;
   border: 10px solid #1b1b1c; border-radius: 34px; background: #fff;
   position: relative; -webkit-overflow-scrolling: touch;
 }
@@ -368,7 +426,7 @@ body.app {
     display: grid; place-items: center; position: fixed; inset: 0; z-index: 40;
     background: var(--app-bg); padding: 1rem;
   }
-  .b-preview.is-open .phone { width: min(92vw, 20rem); height: min(78dvh, 42rem); }
+  .b-preview.is-open .phone { width: min(92vw, 20rem); --phone-h: min(78dvh, 42rem); }
   .b-preview-toggle { position: fixed; left: 50%; translate: -50% 0; bottom: 1rem; z-index: 50; background: var(--app-accent); border-color: var(--app-accent); color: #fff; }
 }
 
@@ -647,3 +705,851 @@ body.app {
   .guest-fields { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
 }
 .guest-fields .field { min-width: 0; }
+
+
+/* ==================================================== content classes ==== */
+/* These were inline styles on the renderer until the editorial theme needed to
+   restyle them. The values are the originals, so every framed theme renders
+   byte-identically; only [data-chrome="open"] below departs from them. */
+.cover-date { letter-spacing: .05em; }
+.cover-place { margin-top: .35rem; }
+.cover-cd { margin-top: 2rem; }
+.cover-cd-label { margin-bottom: .6rem; }
+.bismillah { margin-bottom: 1.5rem; }
+.quote-line { margin-top: .75rem; font-style: italic; }
+.quote-src { margin-top: .6rem; }
+.family-name { font-size: 1.6rem; margin-block: .35rem; }
+.family-parents { font-size: .92rem; }
+.family-grand { margin-top: .4rem; }
+.event-name { font-size: 1.5rem; }
+.event-venue { margin-top: .5rem; }
+.event-when { font-size: .95rem; }
+.event-link { margin-top: 1rem; }
+.rsvp-body { text-align: left; }
+.info-body { margin-top: .35rem; }
+.foot-names { font-size: 1.8rem; margin-top: .5rem; }
+.foot-date { margin-top: .4rem; }
+.foot-love { margin-top: 1rem; }
+
+/* ------------------------------------------------- supplier wordmark ---- */
+/* Set in type, in the invitation's own display face, rather than as an
+   uploaded logo: tracked caps are the treatment a fashion house uses, and a
+   pasted bitmap always looks stuck on. Trailing track is reclaimed so the
+   centred line is actually centred. */
+.studio-mark {
+  font-family: var(--f-display), Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: .38em;
+  font-size: clamp(.6rem, 2.6cqw, .74rem);
+  color: var(--ink);
+  margin-inline-end: -.38em;
+  margin-bottom: clamp(1.8rem, 7cqw, 3rem);
+}
+
+.band { position: relative; }
+/* White type landed on the bride's dress and vanished. A soft foot of shadow
+   gives the mark something to sit on, whatever the photograph happens to do. */
+.band:has(.band-mark)::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 34%;
+  background: linear-gradient(to top, rgba(0, 0, 0, .45), transparent);
+  pointer-events: none;
+}
+.band-mark {
+  z-index: 1;
+  position: absolute;
+  right: clamp(.9rem, 3.5cqw, 2rem);
+  bottom: clamp(.7rem, 2.8cqw, 1.6rem);
+  font-family: var(--f-display), Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: .3em;
+  font-size: clamp(.56rem, 2.2cqw, .7rem);
+  color: #fff;
+  margin-inline-end: -.3em;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .55);
+}
+/* The dot rail runs down the same edge the wordmark sits on, and being fixed
+   over the page it reserves nothing — so wherever the rail is shown the mark
+   has to step in past it. Below 22rem the rail is hidden and the mark keeps
+   the tighter corner, and the builder preview hides the rail too. */
+@media (min-width: 22.0625rem) {
+  .band-mark { right: max(clamp(.9rem, 3.5cqw, 2rem), 2.9rem); }
+}
+.preview-scope .band-mark { right: clamp(.9rem, 3.5cqw, 2rem); }
+
+/* --------------------------------------------------------- print action -- */
+.invite-actions { margin-top: 2.5rem; }
+.print-btn {
+  background: none; border: 0; border-bottom: 1px solid var(--rule);
+  cursor: pointer; padding: .5rem .2rem; min-height: 44px;
+  font-family: var(--f-body), system-ui, sans-serif; color: var(--muted);
+  font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+}
+.print-btn:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.print-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ======================================================== open chrome ==== */
+/* No boxes, no tiles, no pills — separation is space and hairlines only.
+   Boxes are what make a page read as a web form rather than as print, so this
+   is the whole difference between "a website" and "an invitation". Scoped to
+   the attribute, so the eight framed themes are untouched. */
+
+.invite[data-chrome="open"] .wrap { width: min(100% - 3rem, 34rem); }
+.invite[data-chrome="open"] .section { padding-block: clamp(4.5rem, 15cqw, 9rem); }
+
+.invite[data-chrome="open"] .eyebrow {
+  letter-spacing: .34em;
+  font-size: clamp(.58rem, 2.4cqw, .68rem);
+  margin-inline-end: -.34em;
+}
+.invite[data-chrome="open"] .section-title {
+  font-size: clamp(1.5rem, 6cqw, 2.3rem);
+  margin-block: .9rem .2rem;
+}
+
+.invite[data-chrome="open"] .card {
+  background: transparent; border: 0; border-radius: 0;
+  padding: clamp(1.7rem, 7cqw, 2.6rem) 0;
+}
+.invite[data-chrome="open"] .stack > * + * {
+  margin-top: 0;
+  border-top: 1px solid color-mix(in srgb, var(--rule) 55%, transparent);
+}
+.invite[data-chrome="open"] .grid-2 { gap: 0; }
+@container (min-width: 34rem) {
+  .invite[data-chrome="open"] .grid-2 > * + * {
+    border-left: 1px solid color-mix(in srgb, var(--rule) 55%, transparent);
+  }
+}
+@container (max-width: 33.99rem) {
+  .invite[data-chrome="open"] .grid-2 > * + * {
+    border-top: 1px solid color-mix(in srgb, var(--rule) 55%, transparent);
+  }
+  /* The only photograph at full width, on the screen 90% of guests will use. */
+  .invite[data-chrome="open"] .band img { aspect-ratio: 4 / 5; }
+}
+
+/* The quote is the emotional centre. Set as a pull-quote in the display face,
+   not as italic body copy in a box. */
+.invite[data-chrome="open"] .quote-line {
+  font-family: var(--f-display), Georgia, serif;
+  font-style: normal;
+  font-size: clamp(1.25rem, 5.6cqw, 1.75rem);
+  line-height: 1.4;
+  letter-spacing: .01em;
+  margin-top: 0;
+}
+.invite[data-chrome="open"] .quote-src { margin-top: 1.1rem; }
+
+/* Numerals and labels, no tiles. */
+.invite[data-chrome="open"] .countdown { gap: 0; max-width: 24rem; }
+.invite[data-chrome="open"] .cd-cell {
+  background: transparent; border: 0; border-radius: 0; padding: .1rem .35rem;
+}
+.invite[data-chrome="open"] .cd-cell + .cd-cell {
+  border-left: 1px solid color-mix(in srgb, var(--rule) 60%, transparent);
+}
+.invite[data-chrome="open"] .cd-num {
+  font-size: clamp(1.5rem, 7.5cqw, 2.2rem); letter-spacing: .04em;
+}
+.invite[data-chrome="open"] .cd-lbl {
+  font-size: clamp(.44rem, 2cqw, .55rem); letter-spacing: .18em;
+  margin-top: .4rem; margin-inline-end: -.18em;
+}
+
+/* A reply card is a ruled line to write on, not a stack of boxes. The focus
+   ring is kept and pushed outward rather than replaced by a colour change. */
+.invite[data-chrome="open"] form.card { padding-block: 0; }
+.invite[data-chrome="open"] .input,
+.invite[data-chrome="open"] .textarea {
+  background: transparent; border: 0; border-radius: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: .55rem 0;
+}
+.invite[data-chrome="open"] .input:focus-visible,
+.invite[data-chrome="open"] .textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 4px;
+}
+.invite[data-chrome="open"] .label {
+  letter-spacing: .22em; font-size: .62rem; margin-bottom: .6rem;
+}
+.invite[data-chrome="open"] .choice { gap: 0; }
+.invite[data-chrome="open"] .choice button {
+  border: 1px solid var(--rule); border-radius: 0;
+  text-transform: uppercase; letter-spacing: .14em; font-size: .66rem;
+  min-height: 54px; padding-inline: .5rem;
+}
+.invite[data-chrome="open"] .choice button + button { border-left: 0; }
+/* Filled, not tinted: the chosen answer has to be unmistakable. */
+.invite[data-chrome="open"] .choice button[aria-pressed="true"] {
+  background: var(--accent); color: var(--on-accent); border-color: var(--accent);
+}
+.invite[data-chrome="open"] .btn {
+  border-radius: 0; text-transform: uppercase;
+  letter-spacing: .2em; font-size: .68rem; min-height: 54px;
+}
+
+.invite[data-chrome="open"] .reveal {
+  transform: translateY(24px); transition-duration: 1.05s;
+}
+.invite[data-chrome="open"] .organizer { margin-top: 3.5rem; padding-top: 2rem; }
+.invite[data-chrome="open"] .organizer-name { letter-spacing: .1em; }
+.invite[data-chrome="open"] .foot-names { font-size: clamp(1.5rem, 6cqw, 2rem); }
+
+/* Narrowest phones still in use: reclaim the gutter rather than the measure. */
+@media (max-width: 22rem) {
+  .invite[data-chrome="open"] .wrap { width: min(100% - 2rem, 34rem); }
+}
+
+/* ============================================================== print ==== */
+/* A card, not a screenshot of a web page. The countdown, the reply form and
+   every control come off; what is left is the photograph, the names, the
+   words and the programme. */
+@media print {
+  @page { size: A5 portrait; margin: 14mm; }
+
+  html, body.app { background: #fff; }
+  .invite { background: #fff; color: #111; font-size: 10.5pt; }
+
+  /* Reveals never fire without a scroll, so an unrevealed section would print
+     blank. This is the most important line in the block. */
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+
+  /* Foil lettering paints the glyphs transparent over a gradient, and
+     gradients are backgrounds — which browsers do not print. Without this the
+     couple's names come out invisible. */
+  .gilt {
+    background: none !important;
+    -webkit-text-fill-color: #111 !important;
+    color: #111 !important;
+  }
+
+  /* Screen texture would grey the whole sheet. */
+  .surface-grain::before, .surface-linen::before,
+  .surface-marble::before, .surface-plaster::before { display: none !important; }
+
+  /* Hairlines are backgrounds too; redraw them as borders so they survive. */
+  .rule::before, .rule::after { background: none !important; border-top: 1px solid #bbb; }
+  .rule.rule-plain { background: none !important; height: 0 !important; border-top: 1px solid #bbb; }
+
+  .countdown, .cover-cd, #rsvp, .music-btn, .invite-actions,
+  .event-link, .organizer-contact { display: none !important; }
+
+  /* A full viewport height would leave page one almost empty. */
+  .cover { min-height: 0 !important; padding: 0 0 8mm !important; }
+  .section { padding-block: 7mm !important; }
+  .wrap { width: 100% !important; }
+
+  .plate { width: 62mm !important; padding: 1.5mm !important; border-color: #ccc !important; }
+  .plate img { aspect-ratio: 4 / 5; }
+  .band img { aspect-ratio: 3 / 2 !important; max-height: 68mm; }
+  .band-mark { text-shadow: none !important; }
+
+  /* The cover is the card front and gets the page to itself. Sections then
+     flow and pack; only the individual cards must not be split across a fold.
+     Listing .section here too put every section on its own page and turned a
+     four-page card into eight. */
+  .cover { break-after: page; }
+  .card, .band, blockquote, article { break-inside: avoid; }
+  h1, h2 { break-after: avoid; }
+
+  .cover-names { font-size: 30pt !important; }
+  .section-title { font-size: 15pt !important; }
+  .quote-line { font-size: 12pt !important; }
+  .studio-mark { color: #555 !important; }
+  .eyebrow, .note { color: #555 !important; }
+
+  a { text-decoration: none; color: inherit; }
+}
+
+/* ============================================================== legal ==== */
+/* Read once, by someone checking whether they can trust this. Long measure,
+   quiet type, nothing to click but the two things they came for. */
+.legal { max-width: 44rem; }
+.legal-section { margin-top: 2rem; }
+.legal h2 { font-size: 1.15rem; margin-bottom: .5rem; }
+.legal-body {
+  color: var(--app-ink); line-height: 1.7; margin-top: .5rem;
+  white-space: pre-line;                 /* the address is one block, four lines */
+  overflow-wrap: anywhere;
+}
+.legal-todo {
+  margin-top: 1.5rem; padding: .9rem 1rem;
+  border: 1px solid var(--app-accent); border-radius: var(--radius);
+  color: var(--app-ink); font-size: .9rem; line-height: 1.6;
+}
+.legal-updated, .legal-back { margin-top: 2.5rem; font-size: .85rem; color: var(--app-muted); }
+.legal-back { margin-top: .75rem; }
+
+/* The two links at the foot of an invitation. Present, findable, and quiet. */
+.legal-links {
+  margin-top: 1.75rem;
+  font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.legal-links a { color: inherit; text-decoration: underline; text-underline-offset: .25em; }
+.legal-links a:hover { color: var(--ink); }
+
+/* ================================================== tor (gate opener) ==== */
+/* A door at the end of a room, and a camera that walks through it into the
+ * ceremony.
+ *
+ * One custom property drives the whole thing. `--open` runs 0 to 1 and carries
+ * the dolly, the leaves' swing, the light on the threshold, the altar pushing
+ * in behind and the bloom at the end. That is what lets a finger drag and a
+ * tap share a single mechanism instead of two look-alike animations: the drag
+ * sets `--open` directly with transitions off, the tap transitions it to 1.
+ *
+ * On a tap the CHOREOGRAPHY is carried by each layer's own duration and delay,
+ * not by the property's value — `--open` jumps to 1 at once and every layer
+ * eases to its end state on its own clock. That is what staggers the beats.
+ * The thresholds in the calc()s are what shape a drag, where the value really
+ * does move continuously.
+ *
+ * Minimal on purpose: one slender arch, one blade of light at the join, one
+ * pool of light on the floor. The magnificence is meant to come from scale and
+ * emptiness, not from ornament piled on the leaves. */
+
+.tor {
+  position: relative; overflow: hidden;
+  min-height: var(--cover-h, 100dvh);
+  display: grid; place-items: center;
+  background: var(--bg);
+  --open: 0;
+  /* The opening. The portal, the leaves and the jamb all size against these,
+     so the three can never drift apart. Proportion is fixed by aspect-ratio
+     rather than by top/bottom, or the door goes slender on a phone and squat
+     on a laptop. */
+  --door-w: min(66cqw, 24rem);
+  --door-bottom: 6%;
+  --door-arc: 50% 50% 2px 2px / 26% 26% 2px 2px;
+  /* Every timing in the gate derives from this. */
+  --door-t: 2s;
+  --door-ease: cubic-bezier(.42, 0, .28, 1);
+  /* The gate owns horizontal gesture; there is nothing behind it to scroll. */
+  touch-action: none;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+}
+.tor.is-dragging { cursor: grabbing; }
+.tor.is-parting { cursor: default; }
+
+/* Everything inside the camera is scenery, so the gate itself is the only
+   thing that ever receives a pointer. Without this the doorway is the drag
+   target, and dragging an <img> starts Chromium's native image drag — which
+   fires pointercancel and kills the gesture halfway through. */
+.tor-cam { pointer-events: none; }
+.tor-photo img, .tor-couple img { -webkit-user-drag: none; user-select: none; }
+
+/* Camera. One scale on one element is the entire dolly, so walking through the
+   door costs a single composited layer rather than one per scenery piece —
+   and every layer inside keeps its alignment for free. */
+.tor-cam {
+  position: absolute; inset: 0; z-index: 0;
+  /* Shallow enough that the doorway still frames the ceremony as a scene.
+     Past about 2x the camera is already inside the altar and the arbour, the
+     aisle and the dais have all left the frame — a zoom, not a walk. */
+  transform: scale(calc(1 + var(--open) * 1.55));
+  transition: transform var(--door-t) var(--door-ease);
+  will-change: transform;
+}
+
+/* ------------------------------------------- the room the door stands in -- */
+
+.tor-room {
+  position: absolute; inset: 0;
+  /* Light falls from above and dies into the corners. The room is a shade
+     under the leaves so a cream door still reads against a cream wall. */
+  background:
+    radial-gradient(90% 62% at 50% 6%,
+      color-mix(in srgb, #fff 34%, transparent) 0%, transparent 62%),
+    radial-gradient(130% 88% at 50% 34%, transparent 26%,
+      color-mix(in srgb, var(--ink) 16%, transparent) 100%),
+    color-mix(in srgb, var(--bg) 92%, var(--ink));
+}
+
+/* The floor, and the pool of light the door is spilling onto it. Feathered at
+   the top, or the floor reads as a rule ruled across the wall. */
+.tor-floor {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 26%;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--bg) 95%, var(--ink)) 24%,
+    color-mix(in srgb, var(--bg) 99%, var(--ink)) 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 28%);
+          mask-image: linear-gradient(180deg, transparent, #000 28%);
+}
+.tor-floor::after {
+  content: ""; position: absolute; left: 50%; bottom: 0; translate: -50% 0;
+  width: 150%; height: 128%;
+  background: radial-gradient(50% 50% at 50% 0%,
+    color-mix(in srgb, var(--accent) 42%, transparent) 0%, transparent 72%);
+  opacity: calc(.42 + var(--open) * .58);
+  transition: opacity var(--door-t) ease;
+}
+
+/* --------------------------------------------------- what lies beyond ----- */
+/* Clipped to the opening, so the ceremony is only ever seen THROUGH the
+   doorway and never as a backdrop the leaves happen to sit on. */
+
+.tor-portal, .tor-doors, .tor-frame {
+  position: absolute; left: 50%; translate: -50% 0;
+  bottom: var(--door-bottom);
+  width: var(--door-w); aspect-ratio: 5 / 7;
+  border-radius: var(--door-arc);
+}
+
+.tor-portal { z-index: 1; overflow: hidden; background: #fff; }
+
+/* The ceremony. Pushes in slower than the camera, which is what gives the
+   walk-through its parallax instead of one flat zoom. */
+.tor-altar {
+  position: absolute; inset: 0;
+  background: radial-gradient(72% 56% at 50% 44%,
+    #fff 0%,
+    color-mix(in srgb, var(--accent) 12%, #fff) 52%,
+    color-mix(in srgb, var(--accent) 30%, #fff) 100%);
+  transform: scale(calc(1 + var(--open) * .5));
+  transition: transform 1.6s var(--door-ease) .34s;
+}
+
+/* The aisle, running back to the altar. */
+.tor-aisle {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 34%;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--accent) 30%, transparent), transparent 76%);
+  clip-path: polygon(33% 0, 67% 0, 104% 100%, -4% 100%);
+}
+
+/* The arbour: the same apple blossom that drifts over the invitation, trained
+   over the altar. Sharing one motif is what keeps the gate and the page from
+   reading as two different products. */
+.tor-arbour {
+  position: absolute; left: -7%; right: -7%; top: 9%; height: 48%;
+  overflow: visible;
+}
+.tor-arbour .bl-a { fill: color-mix(in srgb, var(--accent) 22%, #fff); }
+.tor-arbour .bl-b { fill: color-mix(in srgb, var(--accent) 42%, #fff); }
+.tor-arbour .bl-c { fill: color-mix(in srgb, var(--rule) 46%, #fff); }
+/* Blossom against a blown-out threshold needs an edge or it dissolves. One
+   shadow on the whole garland, not sixty-four of them. */
+.tor-arbour { filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--ink) 20%, transparent)); }
+
+/* The altar itself, and its two candles. */
+.tor-dais {
+  position: absolute; left: 50%; translate: -50% 0; bottom: 24%;
+  width: 54%; height: 2%;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, #fff 70%, var(--accent)),
+    color-mix(in srgb, var(--accent) 46%, #fff));
+  box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--ink) 50%, transparent);
+}
+.tor-dais::before, .tor-dais::after {
+  content: ""; position: absolute; bottom: 100%;
+  width: 2px; height: 900%;
+  background: linear-gradient(180deg,
+    transparent, color-mix(in srgb, var(--accent) 55%, #fff) 26%);
+}
+.tor-dais::before { left: 12%; }
+.tor-dais::after  { right: 12%; }
+
+/* The couple, mounted the way the cover mounts them, so the plate the gate
+   ends on and the plate the cover opens on are the same object. */
+.tor-couple {
+  position: absolute; left: 50%; top: 47%; translate: -50% -50%;
+  width: 44%; padding: .3rem;
+  background: var(--surface); border: 1px solid var(--rule);
+  box-shadow: 0 22px 54px -22px color-mix(in srgb, var(--ink) 60%, transparent);
+}
+.tor-couple img {
+  display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+}
+
+/* The light on the threshold: warm at rest, blinding by the time the leaves
+   are flat against the jambs. */
+.tor-threshold {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(76% 56% at 50% 58%, #fff 0%, rgba(255,255,255,.44) 46%, transparent 80%),
+    linear-gradient(0deg, color-mix(in srgb, var(--accent) 34%, transparent), transparent 64%);
+  opacity: calc(.26 + var(--open) * .74);
+  transition: opacity 1.5s ease .2s;
+}
+
+/* ------------------------------------------------------------ the leaves -- */
+/* Clipped by the opening: the leaves swing back into the jamb rather than
+   sweeping out over the wall, which is what an inward-opening door does. */
+
+.tor-doors {
+  z-index: 2; overflow: hidden;
+  perspective: 900px; perspective-origin: 50% 46%;
+}
+
+.tor-leaf {
+  position: absolute; top: 0; bottom: 0; width: 50.2%;
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--ink) 13%, var(--bg)) 0%,
+      var(--bg) 22%, var(--bg) 78%,
+      color-mix(in srgb, var(--ink) 8%, var(--bg)) 100%);
+  backface-visibility: hidden;
+  /* A door turning away from the light loses it. */
+  filter: brightness(calc(1 - var(--open) * .34));
+  transition: transform 1.35s var(--door-ease) .1s,
+              filter 1.35s ease .1s;
+}
+.tor-leaf-l {
+  left: 0; transform-origin: left center;
+  transform: rotateY(calc(var(--open) * 88deg));
+}
+.tor-leaf-r {
+  right: 0; transform-origin: right center;
+  transform: rotateY(calc(var(--open) * -88deg));
+}
+
+/* One recessed panel per leaf. A single hairline is the whole detail — two
+   stacked panels and a moulded stile turn a minimal door into joinery. */
+.tor-panel {
+  position: absolute; inset: 5% 12%;
+  border: 1px solid color-mix(in srgb, var(--rule) 55%, transparent);
+  border-radius: inherit;
+}
+
+/* The meeting stile catches the light coming through the join, which is what
+   gives the leaf an edge instead of a cut. */
+.tor-leaf::before {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(90deg, transparent,
+    color-mix(in srgb, #fff 88%, var(--accent)));
+}
+.tor-leaf-l::before { right: 0; }
+.tor-leaf-r::before { left: 0; transform: scaleX(-1); }
+
+/* -------------------------------------------------------------- the jamb -- */
+/* Drawn over the leaves, so they read as hung inside the wall. Two hairlines
+   and a cast shadow — nothing more. */
+.tor-frame {
+  z-index: 3;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--rule) 80%, transparent),
+    0 0 0 7px color-mix(in srgb, var(--bg) 96%, var(--ink)),
+    0 0 0 8px color-mix(in srgb, var(--rule) 34%, transparent),
+    0 34px 90px -30px color-mix(in srgb, var(--accent) 62%, transparent);
+}
+/* The blade of light escaping the join. Drawn above the leaves and gone by the
+   time they are, so a shut door still says there is something lit behind it. */
+.tor-frame::after {
+  content: ""; position: absolute; top: 5%; bottom: 0; left: 50%;
+  width: 8px; translate: -50% 0;
+  background: linear-gradient(90deg, transparent,
+    color-mix(in srgb, #fff 84%, var(--accent)) 48%, transparent);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 16%, #000 90%, transparent);
+          mask-image: linear-gradient(180deg, transparent, #000 16%, #000 90%, transparent);
+  opacity: calc(.9 - var(--open) * 2.6);
+  animation: torSeam 7s ease-in-out infinite;
+  transition: opacity .5s ease;
+}
+@keyframes torSeam { 0%, 100% { filter: none; } 50% { filter: brightness(1.55); } }
+
+/* The keystone. The theme's own ornament, so a deco invitation gets a deco
+   keystone and the plain theme gets none at all rather than a borrowed motif. */
+.tor-key {
+  position: absolute; left: 50%; z-index: 3;
+  bottom: calc(var(--door-bottom) + var(--door-w) * 1.4 + .2rem);
+  translate: -50% 0;
+  color: var(--accent);
+  opacity: calc(1 - var(--open) * 2);
+  transition: opacity .5s ease;
+}
+.tor-key:empty { display: none; }
+
+/* The last third of a second: the threshold blows out, so the cover mounts
+   behind a frame that is already pure light and the two never cut against
+   each other. Late and steep, or the reveal is over before it is seen. */
+.tor-flood {
+  position: absolute; inset: 0; z-index: 4;
+  background: radial-gradient(78% 60% at 50% 46%,
+    #fff 0%, rgba(255,255,255,.8) 48%, rgba(255,255,255,.35) 76%, transparent 92%);
+  opacity: calc(max(0, var(--open) - .6) * 2.5);
+  transition: opacity .95s cubic-bezier(.55, 0, .8, 1) .74s;
+}
+
+/* ------------------------------------------------------------------ film -- */
+/* When a venue supplies a clip, the gate is that clip. The still underneath is
+   its own first frame at the same size and object-fit, so the two are pixel
+   identical and starting playback changes nothing on screen — which is the
+   entire reason the reference reads as an animation rather than as a video
+   that began. Nothing is swapped, nothing re-lays out, so there is no seam. */
+.tor-film { position: absolute; inset: 0; z-index: 1; background: var(--bg); }
+.tor-film img, .tor-film video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+/* The poster only has to survive until the first painted frame. */
+.tor-film img { z-index: 1; }
+.tor-film video { z-index: 2; }
+
+/* The picture element is only there to choose a file; it must not become a
+   box of its own between .tor-film and the image it positions. */
+.tor-film picture { display: contents; }
+
+/* Where a portrait cut exists, every screen gets a file whose aspect it can
+   fill, so the gate stays full-bleed throughout. Where one does not, `cover`
+   on a phone would show the middle quarter of a 16:9 frame and take the doors
+   with it — so that case letterboxes on black rather than cropping. Poster and
+   video take the rule together, or the join between them would show. */
+@media (max-aspect-ratio: 16 / 9) {
+  .tor.has-film:not(.has-film-mobile) .tor-film { background: #000; }
+  .tor.has-film:not(.has-film-mobile) .tor-film img,
+  .tor.has-film:not(.has-film-mobile) .tor-film video { object-fit: contain; }
+}
+
+/* The clip does not end on white; this does. Steep and late, over the film
+   rather than in it, so one master serves however long the cut runs. */
+.tor-film-flood {
+  position: absolute; inset: 0; z-index: 3;
+  background: #fff; opacity: 0; pointer-events: none;
+  transition: opacity .2s cubic-bezier(.55, 0, .8, 1);
+}
+.tor-film-flood.is-lit { opacity: 1; }
+
+/* The CSS door draws its own leaves, so the theme's ink is guaranteed to have
+   something pale to sit on. A supplied clip is any photograph at all — here it
+   is a near-black door — and dark ink on it is not type. Over film the plate
+   goes light and carries its own ground: a scrim wide enough to hold the names
+   whether the frame under them is the door or the blown-out threshold. */
+.tor.has-film .tor-plate {
+  color: #fff;
+  text-shadow: 0 1px 20px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .45);
+}
+/* The wordmark, the ampersand and the hint all set their own ink, so none of
+   them inherit the line above. Stepped down from the names rather than all
+   pure white — the couple is what the plate is for. */
+.tor.has-film .tor-mark { color: rgba(255, 255, 255, .82); }
+.tor.has-film .cover-amp { color: rgba(255, 255, 255, .78); }
+.tor.has-film .tor-hint { color: rgba(255, 255, 255, .66); }
+/* A dark button on a dark door is a shape, not a control. */
+.tor.has-film .tor-btn { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3); }
+.tor.has-film .tor-plate::before {
+  content: ""; position: absolute; inset: -10% -14%; z-index: -1;
+  background: radial-gradient(58% 54% at 50% 50%,
+    rgba(0, 0, 0, .52) 0%, rgba(0, 0, 0, .34) 46%, transparent 74%);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- type ---- */
+/* On the face of the door, and gone well before the leaves are. Centred in
+   the gate rather than stacked above the opening: padding tall enough to clear
+   a 5:8 arch grows the gate past one screen and the door falls off the bottom. */
+.tor-plate {
+  position: relative; z-index: 5; text-align: center;
+  padding: 2rem;
+  display: grid; justify-items: center; gap: .35rem;
+  opacity: calc(1 - var(--open) * 3);
+  transform: translateY(calc(var(--open) * -26px));
+  transition: opacity .5s ease, transform var(--door-t) ease;
+}
+.tor-mark { margin-bottom: clamp(1rem, 4cqw, 1.6rem); }
+/* The names have to sit within the leaves. A slender door IS the composition,
+   so type running past its edges onto the wall reads as an accident rather
+   than as a choice — which is why the gate sets them smaller than the cover. */
+.tor-names { font-size: clamp(1.5rem, 5.4cqw, 3rem); }
+
+/* Dragging is direct manipulation: the leaves must track the finger exactly,
+   so every transition comes off for the duration of the gesture. */
+.tor.is-dragging .tor-cam,
+.tor.is-dragging .tor-altar,
+.tor.is-dragging .tor-leaf,
+.tor.is-dragging .tor-threshold,
+.tor.is-dragging .tor-flood,
+.tor.is-dragging .tor-floor::after,
+.tor.is-dragging .tor-plate { transition: none; }
+
+/* The name assembles letter by letter. */
+.tor-names .ltr {
+  display: inline-block;
+  opacity: 0;
+  animation: letterIn .7s cubic-bezier(.2, .8, .3, 1) both;
+  animation-delay: calc(var(--i) * 55ms + 260ms);
+}
+@keyframes letterIn {
+  from { opacity: 0; transform: translateY(.42em) scaleY(1.12); filter: blur(3px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+
+.tor-btn { margin-top: 1.5rem; position: relative; overflow: hidden; }
+.tor-btn:disabled { opacity: .55; cursor: progress; }
+/* A sheen crossing the button says "press me" without an arrow bouncing. */
+.tor-btn::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 42%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.3), transparent);
+  animation: btnSheen 4.4s ease-in-out 1.4s infinite;
+  pointer-events: none;
+}
+@keyframes btnSheen {
+  0%       { transform: translateX(-170%); }
+  55%, 100% { transform: translateX(330%); }
+}
+
+.tor-hint {
+  font-size: .62rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--muted); margin-inline-end: -.26em; min-height: 1em;
+  margin-top: .9rem;
+}
+
+.tor-progress {
+  display: block; width: 8rem; height: 1px; margin-top: 1rem;
+  background: var(--rule); position: relative; overflow: hidden;
+}
+.tor-progress::after {
+  content: ""; position: absolute; inset: 0;
+  background: var(--accent); transform-origin: left center;
+  animation: torFill 2.4s cubic-bezier(.3, .8, .3, 1) forwards;
+}
+.tor.is-ready .tor-progress { opacity: 0; transition: opacity .5s ease; }
+@keyframes torFill {
+  from { transform: scaleX(.02); }
+  to   { transform: scaleX(1); }
+}
+
+/* ============================================================ blossom ==== */
+/* Apple blossom rather than cherry: this ceremony happens in an Obstgarten.
+   Three layers give it depth, and each petal turns in 3D so it goes edge-on
+   and catches light instead of spinning flat. Transform-only, so the
+   compositor owns every frame and scrolling stays smooth on a phone. */
+.blossom {
+  position: fixed; inset: 0;
+  pointer-events: none; overflow: hidden;
+}
+/* Behind the words, so the small faint petals are genuinely further away
+   rather than merely ordered behind the other petals in one overlay that
+   sits in front of everything. */
+.blossom-back { z-index: 0; }
+.blossom-front { z-index: 5; }
+.preview-scope .blossom { position: absolute; }
+
+.petal {
+  position: absolute; top: -8vh;
+  width: var(--size); height: var(--size);
+  color: #fff;
+  opacity: var(--petal-opacity);
+  perspective: 320px;
+  animation: petalFall var(--fall) linear var(--delay) infinite;
+  will-change: transform;
+}
+/* Two axes on two elements: the span falls, the svg inside turns. Combined in
+   one keyframe set the drift looks mechanical. */
+.petal svg {
+  animation: petalTurn var(--sway) ease-in-out var(--delay) infinite alternate;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .2));
+}
+.petal path { stroke: var(--rule); stroke-width: .9; vector-effect: non-scaling-stroke; }
+
+.petal-mid { z-index: 1; }
+.petal-near { z-index: 2; }
+
+@keyframes petalFall {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); }
+  to   { transform: translate3d(var(--drift), 118vh, 0) rotate(var(--spin)); }
+}
+@keyframes petalTurn {
+  from { transform: rotate3d(1, var(--tilt), .25, -168deg); }
+  to   { transform: rotate3d(1, var(--tilt), .25, 168deg); }
+}
+
+/* ======================================================= scroll chrome === */
+/* A long single page read on a phone needs to say how much is left. */
+.scroll-rail {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 30;
+  pointer-events: none; background: transparent;
+}
+.scroll-rail span {
+  display: block; height: 100%; width: 100%;
+  background: var(--accent); opacity: .55;
+  transform: scaleX(0); transform-origin: left center;
+}
+.preview-scope .scroll-rail, .preview-scope .dots { display: none; }
+
+.dots {
+  position: fixed; right: .55rem; top: 50%; translate: 0 -50%; z-index: 30;
+  display: grid; gap: .1rem;
+}
+.dot {
+  display: grid; place-items: center;
+  width: 30px; height: 30px;                 /* a real tap target, not a 6px dot */
+  -webkit-tap-highlight-color: transparent;
+}
+.dot::before {
+  content: ""; width: 5px; height: 5px; border-radius: 999px;
+  background: var(--muted); opacity: .4;
+  transition: opacity .3s ease, transform .3s ease, background-color .3s ease;
+}
+.dot.is-on::before { background: var(--accent); opacity: 1; transform: scale(1.7); }
+.dot:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: 6px; }
+@media (max-width: 22rem) { .dots { display: none; } }
+
+/* Everywhere the dots are shown and the measure is gutter-limited, the column
+   ran underneath them: body copy to within a few pixels of a 30px tap target,
+   and on the reply section a "Leider nicht" button directly beneath one. The
+   dots are fixed over the page rather than in its flow, so nothing reserves
+   that strip — the gutter has to. Widened symmetrically, because these
+   sections are centred and an asymmetric inset moves the optical centre off
+   the page's own; the dots give back what the gutter takes by sitting flush
+   to the edge. Above 40rem the measure caps at 34rem and clears them anyway. */
+@media (min-width: 22.0625rem) and (max-width: 40rem) {
+  .dots { right: 0; }
+  .invite[data-chrome="open"] .wrap { width: min(100% - 4.5rem, 34rem); }
+}
+
+/* Anchor jumps from the dots should glide, and #top must clear the rail. */
+html { scroll-behavior: smooth; }
+.invite [id] { scroll-margin-top: 1.5rem; }
+
+/* ------------------------------------------- motion, opted out of ------- */
+@media (prefers-reduced-motion: reduce) {
+  .blossom { display: none; }
+  .tor-cam, .tor-altar, .tor-leaf, .tor-plate,
+  .tor-threshold, .tor-flood, .tor-floor::after { transition: none; }
+  /* The gate still has to leave. It just must not move on the way out, so the
+     door stays shut and the whole thing dissolves. */
+  .tor { transition: opacity .5s ease; }
+  .tor.is-parting { opacity: 0; }
+  /* Except where the gate is a clip: it plays here too, so it must not
+     dissolve out from under itself. The type still fades off the front
+     rather than snapping, since that fade is the film's own opening beat. */
+  .tor.has-film.is-parting { opacity: 1; }
+  .tor.has-film .tor-plate { transition: opacity .5s ease; }
+  .tor-photo img, .tor-btn::after { animation: none; }
+  .tor-names .ltr { animation: none; opacity: 1; }
+  .tor-progress::after { animation: none; transform: scaleX(1); }
+  .dot::before { transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* Ambient decoration and navigation are screen furniture. */
+@media print {
+  .blossom, .scroll-rail, .dots { display: none !important; }
+}
+
+/* --------------------------------------------- arriving through the gate -- */
+/* The photograph was full-bleed a moment ago and the cover shows it at plate
+   size. Settling the plate out of the same push-in, with the type rising
+   after it, keeps the gate and the cover reading as one movement instead of
+   two states cut together. */
+.cover-arrive .plate {
+  animation: plateSettle 1.15s cubic-bezier(.16, .84, .28, 1) both;
+  transform-origin: center 42%;
+}
+@keyframes plateSettle {
+  from { transform: scale(1.85); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.cover-arrive > div > *:not(.plate) {
+  animation: coverRise .85s ease .3s both;
+}
+@keyframes coverRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cover-arrive .plate, .cover-arrive > div > *:not(.plate) { animation: none; }
+}

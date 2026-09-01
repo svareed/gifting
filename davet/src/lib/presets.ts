@@ -15,6 +15,13 @@ export const EVENT_PRESETS: Record<string, Record<Locale, string>> = {
     de: "Standesamtliche Trauung",
     tr: "Resmî Nikâh",
   },
+  // The German default for couples who marry outside a church: a ceremony led
+  // by a celebrant rather than a clergyman.
+  "freie-trauung": {
+    en: "Humanist Ceremony",
+    de: "Freie Trauung",
+    tr: "Serbest Nikâh Töreni",
+  },
 };
 
 export const PRESET_KEYS = Object.keys(EVENT_PRESETS);

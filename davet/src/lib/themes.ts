@@ -6,10 +6,40 @@ import type { ThemeId } from "./types";
  * it appears in the picker, the renderer, and the OG image with no other edits.
  */
 
-export type FontPairing = "classic" | "deco" | "modern" | "garamond";
-export type Ornament = "diamond" | "tile" | "leaf" | "deco" | "weave";
-export type Surface = "grain" | "marble" | "linen" | "none";
+export type FontPairing = "classic" | "deco" | "modern" | "garamond" | "editorial";
+export type Ornament = "diamond" | "tile" | "leaf" | "deco" | "weave" | "none";
+export type Surface = "grain" | "marble" | "linen" | "plaster" | "none";
 export type Motion = "veil" | "fade-rise" | "none";
+
+/**
+ * How the display face is set. One named decision rather than four loose knobs,
+ * because these only ever move together: a title-case serif wants a tight fit,
+ * an italic ampersand and a foil sheen across the letterforms, while tracked
+ * caps want air, an upright ampersand and flat ink — a theme whose accent is
+ * ink rather than a metal has no foil to catch the light.
+ */
+export type Lettering = "titlecase" | "tracked-caps";
+
+/**
+ * Whether content sits inside framed cards or directly on the ground. "open"
+ * is the editorial treatment: no boxes, no tiles, no pills — separation is
+ * space and hairlines only. Boxes are what make a page read as a web form
+ * rather than as print, so this is the single biggest lever on how expensive
+ * an invitation looks.
+ */
+export type Chrome = "framed" | "open";
+
+const LETTERING: Record<
+  Lettering,
+  { case: string; track: string; amp: string; giltFill: string }
+> = {
+  titlecase: {
+    case: "none", track: "-0.01em", amp: "italic", giltFill: "transparent",
+  },
+  "tracked-caps": {
+    case: "uppercase", track: ".1em", amp: "normal", giltFill: "var(--ink)",
+  },
+};
 
 export type Palette = {
   bg: string;
@@ -31,6 +61,10 @@ export type Theme = {
   ornament: Ornament;
   surface: Surface;
   motion: Motion;
+  /** Defaults to "titlecase", which is how every ornamented theme is set. */
+  lettering?: Lettering;
+  /** Defaults to "framed". */
+  chrome?: Chrome;
 };
 
 /** Only the active theme's families are ever painted, so only those download. */
@@ -42,6 +76,7 @@ export const FONT_STACKS: Record<
   deco: { display: "var(--f-cinzel)", body: "var(--f-jost)" },
   modern: { display: "var(--f-playfair)", body: "var(--f-outfit)" },
   garamond: { display: "var(--f-ebgaramond)", body: "var(--f-outfit)" },
+  editorial: { display: "var(--f-italiana)", body: "var(--f-jost)" },
 };
 
 export const THEMES: Record<ThemeId, Theme> = {
@@ -171,6 +206,31 @@ export const THEMES: Record<ThemeId, Theme> = {
       onAccent: "#FFF8F3",
     },
   },
+  /**
+   * The one theme with no ornament and no colour. Built for studios that
+   * photograph in black and white and sell on restraint: the accent is ink
+   * rather than a metal, so nothing on the page competes with the photograph.
+   */
+  "atelier-blanc": {
+    id: "atelier-blanc",
+    dark: false,
+    fonts: "editorial",
+    ornament: "none",
+    surface: "plaster",
+    motion: "fade-rise",
+    lettering: "tracked-caps",
+    chrome: "open",
+    palette: {
+      bg: "#F1EEE9",
+      surface: "#FAF8F5",
+      ink: "#141312",
+      muted: "#8A857D",
+      accent: "#1B1917",
+      accentSoft: "#E4E0D9",
+      rule: "#CBC6BC",
+      onAccent: "#F7F5F1",
+    },
+  },
   kasavu: {
     id: "kasavu",
     dark: false,
@@ -195,6 +255,7 @@ export const THEME_LIST: Theme[] = Object.values(THEMES);
 
 export function themeVars(theme: Theme): Record<string, string> {
   const stack = FONT_STACKS[theme.fonts];
+  const set = LETTERING[theme.lettering ?? "titlecase"];
   return {
     "--bg": theme.palette.bg,
     "--surface": theme.palette.surface,
@@ -206,5 +267,9 @@ export function themeVars(theme: Theme): Record<string, string> {
     "--on-accent": theme.palette.onAccent,
     "--f-display": stack.display,
     "--f-body": stack.body,
+    "--display-case": set.case,
+    "--display-track": set.track,
+    "--amp-style": set.amp,
+    "--gilt-fill": set.giltFill,
   };
 }

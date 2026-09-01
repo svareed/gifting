@@ -1,11 +1,12 @@
 import type { Messages } from "./en";
 
 export const de: Messages = {
-  nav: { home: "Start", couple: "Paar", events: "Programm", info: "Infos" },
+  nav: { home: "Start", couple: "Paar", events: "Programm", info: "Infos", quote: "Worte", rsvp: "Antwort", sections: "Abschnitte dieser Einladung" },
   opener: {
     preparing: "Deine Einladung wird vorbereitet",
     open: "Einladung öffnen",
     tapToOpen: "Zum Öffnen tippen",
+    dragToOpen: "Auseinanderziehen oder tippen",
     scratch: "Rubbel die Folie frei und entdecke den Tag",
     revealed: "Nach oben wischen",
   },
@@ -13,9 +14,17 @@ export const de: Messages = {
   countdown: { days: "Tage", hours: "Stunden", minutes: "Minuten", seconds: "Sekunden" },
   families: { heading: "Gemeinsam mit ihren Familien", groom: "Der Bräutigam", bride: "Die Braut" },
   verses: {
-    heading: { islamic: "Worte aus dem Koran", christian: "Worte aus der Bibel" },
-    source: { islamic: "Koran", christian: "Bibel" },
-    sub: "Über Liebe, Verbundenheit und Barmherzigkeit",
+    heading: {
+      islamic: "Worte aus dem Koran",
+      christian: "Worte aus der Bibel",
+      secular: "Worte für diesen Tag",
+    },
+    source: { islamic: "Koran", christian: "Bibel", secular: "Literatur & Film" },
+    sub: {
+      islamic: "Über Liebe, Verbundenheit und Barmherzigkeit",
+      christian: "Über Liebe, Verbundenheit und Barmherzigkeit",
+      secular: "Über das Sehen und das Bleiben",
+    },
   },
   events: {
     heading: "Hochzeitsprogramm",
@@ -26,6 +35,7 @@ export const de: Messages = {
   rsvp: {
     heading: "Um Rückmeldung wird gebeten",
     respondBy: "Bitte antworte bis zum",
+    willYouCome: "Kommst du?",
     yourName: "Dein Name",
     attending: "Ich komme sehr gerne",
     notAttending: "Leider nicht",
@@ -39,10 +49,46 @@ export const de: Messages = {
     privacy:
       "Dein Name und deine Antwort werden nur an das Paar weitergegeben und nach der Hochzeit gelöscht.",
   },
-  organizer: { hostedAt: "Ausgerichtet im", call: "Anrufen" },
+  organizer: { hostedAt: "Eine Einladung von", call: "Anrufen" },
   info: { heading: "Gut zu wissen", weather: "Wetter", dress: "Kleiderordnung", parking: "Parken" },
-  footer: { withLove: "In Liebe und mit Duʿā" },
+  footer: {
+    withLove: {
+      islamic: "In Liebe und mit Duʿā",
+      christian: "In Liebe und mit Gottes Segen",
+      secular: "In Liebe und voller Vorfreude",
+    },
+  },
   music: { play: "Musik abspielen", pause: "Musik pausieren" },
+  actions: { print: "Einladung drucken" },
+  formal: {
+    opener: {
+      preparing: "Ihre Einladung wird vorbereitet",
+      tapToOpen: "Zum Öffnen tippen",
+      scratch: "Rubbeln Sie die Folie frei und entdecken Sie den Tag",
+      revealed: "Nach oben wischen",
+    },
+    events: { sub: "Über Ihr Kommen würden wir uns sehr freuen" },
+    rsvp: {
+      respondBy: "Bitte antworten Sie bis zum",
+      yourName: "Ihr Name",
+      willYouCome: "Kommen Sie?",
+      attending: "Ich komme sehr gerne",
+      notAttending: "Leider nicht",
+      guests: "Gäste (inkl. Ihnen)",
+      message: "Eine Nachricht an das Paar (optional)",
+      thanks: "Danke — Ihre Rückmeldung ist beim Paar angekommen.",
+      seatsHint: "Für Sie sind {n} Plätze reserviert.",
+      privacy: "Ihr Name und Ihre Antwort werden nur an das Paar weitergegeben und nach der Hochzeit gelöscht.",
+    },
+  },
+  legal: {
+    imprint: "Impressum",
+    privacy: "Datenschutz",
+    updated: "Stand",
+    backHome: "Zurück zum Start",
+    placeholderWarning:
+      "Diese Seite enthält noch Platzhalter in eckigen Klammern. Bitte die Betreiberangaben eintragen, bevor ein Einladungslink verschickt wird.",
+  },
 
   ui: {
     language: "Sprache",
@@ -60,6 +106,7 @@ export const de: Messages = {
       "rosewater":       { name: "Rosenwasser",        blurb: "Zarter Rosé-Grund, botanische Linien, sanfter Kontrast." },
       "sand-terracotta": { name: "Sand & Terrakotta",  blurb: "Warme Erdtöne, modern, zurückhaltend." },
       "kasavu":          { name: "Kasavu",             blurb: "Cremefarbener Stoff mit Goldbordüre — Kerala, vom Webstuhl." },
+      "atelier-blanc":   { name: "Atelier Blanc",     blurb: "Kalkweiß, Tinte statt Gold, ganz ohne Ornament." },
     },
   },
   landing: {
@@ -69,7 +116,7 @@ export const de: Messages = {
     start: "Einladung erstellen",
     example: "Beispiel ansehen",
     demo: "Demo-Modus: keine Datenbank eingerichtet — nichts überlebt hier einen Neustart. Supabase-Zugangsdaten eintragen, um zu speichern.",
-    stylesHeading: "Acht Stile",
+    stylesHeading: "{n} Stile",
     stylesLede: "Jeder ändert Farben, Schrift und Ornament — nie die Worte.",
   },
   login: {
@@ -199,6 +246,11 @@ export const de: Messages = {
       addEvent: "Programmpunkt hinzufügen",
       addFamily: "Familie hinzufügen",
       addVerse: "Eigenen Vers hinzufügen",
+      showBrand: "Meine Marke über dem Foto zeigen",
+      showBlossom: "Obstblüten über die Seite treiben lassen",
+      addressForm: "Anrede der Gäste",
+      addressInformal: "Du",
+      addressFormal: "Sie",
       verseText: "Der Wortlaut",
       verseRef: "Quelle (optional)",
       verseOriginal: "Originalschrift (optional)",

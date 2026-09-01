@@ -1,6 +1,6 @@
 import type { Ornament as OrnamentId } from "@/lib/themes";
 
-const PATHS: Record<OrnamentId, React.ReactNode> = {
+const PATHS: Record<Exclude<OrnamentId, "none">, React.ReactNode> = {
   diamond: (
     <>
       <path d="M11 2 L20 11 L11 20 L2 11 Z" fill="none" stroke="currentColor" strokeWidth="1" />
@@ -35,6 +35,7 @@ const PATHS: Record<OrnamentId, React.ReactNode> = {
 };
 
 export function Ornament({ id, size = 22 }: { id: OrnamentId; size?: number }) {
+  if (id === "none") return null;
   return (
     <svg width={size} height={size} viewBox="0 0 22 22" aria-hidden="true">
       {PATHS[id]}
@@ -42,10 +43,13 @@ export function Ornament({ id, size = 22 }: { id: OrnamentId; size?: number }) {
   );
 }
 
-export function Rule({ id }: { id: OrnamentId }) {
+export function Rule({ id, size }: { id: OrnamentId; size?: number }) {
+  // With no glyph there is nothing for the two halves to sit either side of,
+  // so the rule becomes one uninterrupted hairline instead of a visible gap.
+  if (id === "none") return <div className="rule rule-plain" aria-hidden="true" />;
   return (
     <div className="rule" aria-hidden="true">
-      <Ornament id={id} />
+      <Ornament id={id} size={size} />
     </div>
   );
 }

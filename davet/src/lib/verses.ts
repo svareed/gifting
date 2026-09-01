@@ -179,6 +179,91 @@ export const VERSE_LIBRARY: LibraryVerse[] = [
       tr: "Tanrı'nın birleştirdiğini insan ayırmasın.",
     },
   },
+  // Secular ----------------------------------------------------------------
+  // Lines Germans actually quote at a wedding without anyone's belief being
+  // the subject: one from film, the rest from writers long out of copyright.
+  {
+    key: "casablanca-augen",
+    tradition: "secular",
+    original: null,
+    ref: {
+      en: "Casablanca, 1942",
+      de: "Casablanca, 1942",
+      tr: "Casablanca, 1942",
+    },
+    text: {
+      en: "Here's looking at you, kid.",
+      de: "Ich schau dir in die Augen, Kleines.",
+      tr: "Gözlerine bakıyorum, ufaklık.",
+    },
+  },
+  {
+    key: "goethe-verweile",
+    tradition: "secular",
+    original: null,
+    ref: {
+      en: "Johann Wolfgang von Goethe · Faust I",
+      de: "Johann Wolfgang von Goethe · Faust I",
+      tr: "Johann Wolfgang von Goethe · Faust I",
+    },
+    text: {
+      en: "Stay a while — you are so beautiful.",
+      de: "Verweile doch, du bist so schön.",
+      tr: "Dur bir an — ne kadar güzelsin.",
+    },
+  },
+  {
+    key: "rilke-einsamkeiten",
+    tradition: "secular",
+    original: null,
+    ref: {
+      en: "Rainer Maria Rilke · Letters",
+      de: "Rainer Maria Rilke · Briefe",
+      tr: "Rainer Maria Rilke · Mektuplar",
+    },
+    text: {
+      en: "Love consists in this: that two solitudes greet, protect and border one another.",
+      de: "Liebe besteht darin, dass zwei Einsamkeiten sich grüßen, sich schützen und begrenzen.",
+      tr: "Aşk şudur: iki yalnızlığın birbirini selamlaması, koruması ve sınırlaması.",
+    },
+  },
+  {
+    key: "saint-exupery-richtung",
+    tradition: "secular",
+    original: null,
+    ref: {
+      en: "Antoine de Saint-Exupéry",
+      de: "Antoine de Saint-Exupéry",
+      tr: "Antoine de Saint-Exupéry",
+    },
+    text: {
+      en: "Love does not consist in gazing at each other, but in looking together in the same direction.",
+      de: "Liebe besteht nicht darin, dass man einander ansieht, sondern dass man gemeinsam in dieselbe Richtung blickt.",
+      tr: "Sevmek birbirine bakmak değil, birlikte aynı yöne bakmaktır.",
+    },
+  },
+  {
+    key: "huch-verschwenden",
+    tradition: "secular",
+    original: null,
+    ref: { en: "Ricarda Huch", de: "Ricarda Huch", tr: "Ricarda Huch" },
+    text: {
+      en: "Love is the only thing that grows by being squandered.",
+      de: "Liebe ist das Einzige, was wächst, indem wir es verschwenden.",
+      tr: "Aşk, harcadıkça büyüyen tek şeydir.",
+    },
+  },
+  {
+    key: "busch-freude",
+    tradition: "secular",
+    original: null,
+    ref: { en: "Wilhelm Busch", de: "Wilhelm Busch", tr: "Wilhelm Busch" },
+    text: {
+      en: "If you would be happy in life, add to the happiness of others — for the joy we give returns to our own heart.",
+      de: "Willst du glücklich sein im Leben, trage bei zu andrer Glück, denn die Freude, die wir geben, kehrt ins eigne Herz zurück.",
+      tr: "Hayatta mutlu olmak istiyorsan başkalarının mutluluğuna katkıda bulun; çünkü verdiğimiz sevinç kendi kalbimize döner.",
+    },
+  },
 ];
 
 export const VERSES_BY_KEY = new Map(VERSE_LIBRARY.map((v) => [v.key, v]));

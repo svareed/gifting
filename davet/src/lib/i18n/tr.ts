@@ -1,11 +1,12 @@
 import type { Messages } from "./en";
 
 export const tr: Messages = {
-  nav: { home: "Başlangıç", couple: "Çift", events: "Program", info: "Bilgi" },
+  nav: { home: "Başlangıç", couple: "Çift", events: "Program", info: "Bilgi", quote: "Sözler", rsvp: "Yanıt", sections: "Bu davetiyenin bölümleri" },
   opener: {
     preparing: "Davetiyeniz hazırlanıyor",
     open: "Davetiyeyi Aç",
     tapToOpen: "Açmak için dokunun",
+    dragToOpen: "Aralayın ya da dokunun",
     scratch: "Günü ortaya çıkarmak için kazıyın",
     revealed: "Devam etmek için yukarı kaydırın",
   },
@@ -13,9 +14,17 @@ export const tr: Messages = {
   countdown: { days: "Gün", hours: "Saat", minutes: "Dakika", seconds: "Saniye" },
   families: { heading: "Aileleriyle Birlikte", groom: "Damat", bride: "Gelin" },
   verses: {
-    heading: { islamic: "Kur'an-ı Kerim'den", christian: "Kutsal Kitap'tan" },
-    source: { islamic: "Kur'an", christian: "Kutsal Kitap" },
-    sub: "Sevgi, yoldaşlık ve merhamet üzerine",
+    heading: {
+      islamic: "Kur'an-ı Kerim'den",
+      christian: "Kutsal Kitap'tan",
+      secular: "Bu güne dair sözler",
+    },
+    source: { islamic: "Kur'an", christian: "Kutsal Kitap", secular: "Edebiyat & sinema" },
+    sub: {
+      islamic: "Sevgi, yoldaşlık ve merhamet üzerine",
+      christian: "Sevgi, yoldaşlık ve merhamet üzerine",
+      secular: "Görmek ve kalmak üzerine",
+    },
   },
   events: {
     heading: "Düğün Programı",
@@ -26,6 +35,7 @@ export const tr: Messages = {
   rsvp: {
     heading: "Lütfen Katılım Bildirin",
     respondBy: "Lütfen şu tarihe kadar bildirin",
+    willYouCome: "Geliyor musun?",
     yourName: "Adınız",
     attending: "Seve seve katılıyorum",
     notAttending: "Maalesef katılamıyorum",
@@ -39,10 +49,46 @@ export const tr: Messages = {
     privacy:
       "Adınız ve yanıtınız yalnızca çiftle paylaşılır ve düğünden sonra silinir.",
   },
-  organizer: { hostedAt: "Mekân", call: "Ara" },
+  organizer: { hostedAt: "Davet eden", call: "Ara" },
   info: { heading: "Bilmeniz Gerekenler", weather: "Hava Durumu", dress: "Kıyafet", parking: "Otopark" },
-  footer: { withLove: "Sevgi ve dualarla" },
+  footer: {
+    withLove: {
+      islamic: "Sevgi ve dualarla",
+      christian: "Sevgi ve Tanrı'nın bereketiyle",
+      secular: "Sevgiyle ve büyük bir heyecanla",
+    },
+  },
   music: { play: "Müziği çal", pause: "Müziği duraklat" },
+  actions: { print: "Davetiyeyi yazdır" },
+  formal: {
+    opener: {
+      preparing: "Davetiyeniz hazırlanıyor",
+      tapToOpen: "Açmak için dokunun",
+      scratch: "Folyoyu kazıyın ve günü keşfedin",
+      revealed: "Devam etmek için yukarı kaydırın",
+    },
+    events: { sub: "Katılımınızla bizi onurlandırırsınız" },
+    rsvp: {
+      respondBy: "Lütfen şu tarihe kadar bildirin",
+      yourName: "Adınız",
+      willYouCome: "Geliyor musunuz?",
+      attending: "Memnuniyetle katılıyorum",
+      notAttending: "Maalesef katılamıyorum",
+      guests: "Misafirler (siz dahil)",
+      message: "Çifte bir not (isteğe bağlı)",
+      thanks: "Teşekkürler — yanıtınız çifte ulaştı.",
+      seatsHint: "Sizin için {n} kişilik yer ayrıldı.",
+      privacy: "Adınız ve yanıtınız yalnızca çiftle paylaşılır ve düğünden sonra silinir.",
+    },
+  },
+  legal: {
+    imprint: "Künye",
+    privacy: "Gizlilik",
+    updated: "Son güncelleme",
+    backHome: "Başa dön",
+    placeholderWarning:
+      "Bu sayfa hâlâ köşeli parantez içinde yer tutucular içeriyor. Herhangi bir davetiye bağlantısı göndermeden önce işletmeci bilgilerini doldurun.",
+  },
 
   ui: {
     language: "Dil",
@@ -60,6 +106,7 @@ export const tr: Messages = {
       "rosewater":       { name: "Gül Suyu",           blurb: "Pudra zemin, botanik çizgiler, yumuşak kontrast." },
       "sand-terracotta": { name: "Kum & Terrakotta",   blurb: "Sıcak toprak tonları, çağdaş, ölçülü." },
       "kasavu":          { name: "Kasavu",             blurb: "Altın bordürlü krem kumaş — tezgâhtan Kerala." },
+      "atelier-blanc":   { name: "Atelier Blanc",     blurb: "Kireç beyazı, altın yerine mürekkep, hiç süsleme yok." },
     },
   },
   landing: {
@@ -69,7 +116,7 @@ export const tr: Messages = {
     start: "Davetiye oluştur",
     example: "Örneğe bak",
     demo: "Demo modu: veritabanı tanımlı değil — burada yaptığınız hiçbir şey yeniden başlatmayı atlatmaz. Kaydetmek için Supabase bilgilerini girin.",
-    stylesHeading: "Sekiz stil",
+    stylesHeading: "{n} stil",
     stylesLede: "Her biri rengi, yazıyı ve süslemeyi değiştirir — sözleri asla.",
   },
   login: {
@@ -199,6 +246,11 @@ export const tr: Messages = {
       addEvent: "Program ekle",
       addFamily: "Aile ekle",
       addVerse: "Kendi ayetinizi ekleyin",
+      showBrand: "Markamı fotoğrafın üstünde göster",
+      showBlossom: "Meyve çiçeklerinin sayfada süzülmesine izin ver",
+      addressForm: "Misafirlere hitap",
+      addressInformal: "Sen",
+      addressFormal: "Siz",
       verseText: "Metin",
       verseRef: "Kaynak (isteğe bağlı)",
       verseOriginal: "Özgün yazı (isteğe bağlı)",

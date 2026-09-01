@@ -1,7 +1,7 @@
 import { en } from "./en";
 import { de } from "./de";
 import { tr } from "./tr";
-import { LOCALES, type Locale } from "../types";
+import { LOCALES, type AddressForm, type Locale } from "../types";
 import type { Messages } from "./en";
 
 export type { Messages };
@@ -25,6 +25,23 @@ export function parseLocale(value: string | undefined | null): Locale | null {
 
 export function messages(locale: Locale): Messages {
   return CATALOGUES[locale] ?? CATALOGUES[DEFAULT_LOCALE];
+}
+
+/**
+ * The catalogue as a given invitation should speak it. Formal address is a
+ * thin overlay: only the groups that address a guest are replaced, so a new
+ * heading added to the informal catalogue never needs a formal twin.
+ */
+export function messagesFor(locale: Locale, addressForm: AddressForm): Messages {
+  const base = messages(locale);
+  if (addressForm !== "formal") return base;
+  const f = base.formal;
+  return {
+    ...base,
+    opener: { ...base.opener, ...f.opener },
+    events: { ...base.events, ...f.events },
+    rsvp: { ...base.rsvp, ...f.rsvp },
+  };
 }
 
 export const LOCALE_NAMES: Record<Locale, string> = {

@@ -52,6 +52,7 @@ function toInvite(r: any): Invite {
     slugLocked: r.slug_locked ?? false,
     locale: r.locale,
     tradition: r.tradition ?? "islamic",
+    addressForm: r.address_form ?? "informal",
     theme: r.theme,
     opener: r.opener,
     timezone: r.timezone,
@@ -106,6 +107,7 @@ function inviteColumns(p: Partial<Invite>): Record<string, unknown> {
   const map: Record<string, string> = {
     slug: "slug", slugLocked: "slug_locked", status: "status",
     locale: "locale", tradition: "tradition", theme: "theme",
+    addressForm: "address_form",
     opener: "opener", timezone: "timezone", partnerAName: "partner_a_name",
     partnerBName: "partner_b_name", heroImage: "hero_image",
     inviteCard: "invite_card", sections: "sections",

@@ -13,7 +13,7 @@ import { isSlugAvailableShape } from "@/lib/slug";
 import { isFamilyNameLinked, setPartnerName } from "@/lib/linked";
 import { isSeedValue, isUntouchedExample } from "@/lib/seed";
 import { LOCALES, OPENER_IDS, TRADITIONS } from "@/lib/types";
-import type { Invite, Locale, OpenerId, SectionKey, ThemeId, Tradition } from "@/lib/types";
+import type { AddressForm, Invite, Locale, OpenerId, SectionKey, ThemeId, Tradition } from "@/lib/types";
 
 const TIMEZONES = [
   "Europe/Berlin", "Europe/Istanbul", "Europe/London", "Europe/Amsterdam",
@@ -25,6 +25,8 @@ const OPENER_LABEL: Record<OpenerId, Record<Locale, string>> = {
   foil: { en: "Scratch foil", de: "Rubbelfolie", tr: "Kazı kazan" },
   envelope: { en: "Envelope", de: "Umschlag", tr: "Zarf" },
   direct: { en: "Straight in", de: "Direkt", tr: "Doğrudan" },
+  // Needs a cover photograph to open onto; falls back to the veil without one.
+  tor: { en: "Gate", de: "Torflügel", tr: "Kapı kanatları" },
 };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -451,6 +453,12 @@ export function Builder({
                  open={open === "verses"} onToggle={() => toggle("verses")}>
           <Toggle label={m.b.f.showSection} checked={invite.sections.verses}
                   onChange={(v) => setSection("verses", v)} />
+          <Select label={m.b.f.addressForm} value={invite.addressForm}
+                  onChange={(v: AddressForm) => set("addressForm", v)}
+                  options={[
+                    { value: "informal", label: m.b.f.addressInformal },
+                    { value: "formal", label: m.b.f.addressFormal },
+                  ]} />
           <Select label={m.b.f.tradition} value={invite.tradition}
                   onChange={(t: Tradition) =>
                     // Verses from the other tradition are dropped: keeping them
@@ -553,6 +561,10 @@ export function Builder({
                 onChange={(v) => set("organizerUrl", v)} />
           <Text label={m.b.f.organizerPhone} value={invite.organizerPhone} inputMode="tel"
                 onChange={(v) => set("organizerPhone", v)} />
+          <Toggle label={m.b.f.showBrand} checked={invite.sections.brand}
+                  onChange={(v) => setSection("brand", v)} />
+          <Toggle label={m.b.f.showBlossom} checked={invite.sections.blossom}
+                  onChange={(v) => setSection("blossom", v)} />
         </Section>
 
         <Section id="sec-info" title={m.b.sections.info} summary={summary.info}

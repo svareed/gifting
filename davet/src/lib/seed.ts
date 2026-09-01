@@ -96,6 +96,17 @@ export function isUntouchedExample(invite: {
   );
 }
 
+/**
+ * The pair a new invitation opens with. A Record over Tradition, so adding a
+ * tradition without choosing its opening quotes is a compile error rather than
+ * an empty section nobody notices until a couple publishes.
+ */
+const SEED_VERSE_KEYS: Record<Tradition, [string, string]> = {
+  islamic: ["ar-rum-30-21", "an-naba-78-8"],
+  christian: ["1-cor-13-4", "mark-10-9"],
+  secular: ["casablanca-augen", "goethe-verweile"],
+};
+
 const DEFAULT_SECTIONS: Record<SectionKey, boolean> = {
   events: true,
   families: true,
@@ -105,6 +116,10 @@ const DEFAULT_SECTIONS: Record<SectionKey, boolean> = {
   // "things to know" reads as an unfinished invitation.
   info: false,
   music: false,
+  // Opt-in: a couple's own invitation should not carry a supplier's wordmark
+  // unless the supplier is the one who made it.
+  brand: false,
+  blossom: false,
 };
 
 export function seedInvite(opts: {
@@ -140,6 +155,7 @@ export function seedInvite(opts: {
     slugLocked: false,
     locale,
     tradition,
+    addressForm: "informal",
     theme: "ivory-gold",
     opener: "veil",
     timezone,
@@ -195,17 +211,14 @@ export function seedInvite(opts: {
         grandparents: "",
       },
     ],
-    verses: [
-      ...(tradition === "islamic"
-        ? [
-            { id: `${id}-v1`, sort: 0, libraryKey: "ar-rum-30-21", customArabic: null, customText: null, customRef: null },
-            { id: `${id}-v2`, sort: 1, libraryKey: "an-naba-78-8", customArabic: null, customText: null, customRef: null },
-          ]
-        : [
-            { id: `${id}-v1`, sort: 0, libraryKey: "1-cor-13-4", customArabic: null, customText: null, customRef: null },
-            { id: `${id}-v2`, sort: 1, libraryKey: "mark-10-9", customArabic: null, customText: null, customRef: null },
-          ]),
-    ],
+    verses: SEED_VERSE_KEYS[tradition].map((libraryKey, i) => ({
+      id: `${id}-v${i + 1}`,
+      sort: i,
+      libraryKey,
+      customArabic: null,
+      customText: null,
+      customRef: null,
+    })),
     updatedAt: new Date().toISOString(),
   };
 }

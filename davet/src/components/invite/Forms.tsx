@@ -70,7 +70,7 @@ export function RsvpForm({
       </label>
 
       <div className="field">
-        <span className="label">{m.rsvp.heading}</span>
+        <span className="label">{m.rsvp.willYouCome}</span>
         <div className="choice">
           <button type="button" aria-pressed={attending === true} onClick={() => setAttending(true)}>
             {m.rsvp.attending}

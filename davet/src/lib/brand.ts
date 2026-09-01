@@ -17,3 +17,19 @@ export const EXAMPLE_VENUE = {
   /** Initials for the wordmark, so no image asset has to ship. */
   monogram: "FR",
 } as const;
+
+/**
+ * The placeholder studio, for the same reason and under the same rule: a
+ * plausible-but-invented German name that belongs to nobody. Photographers and
+ * planners are the other half of this product's buyers — they resell the
+ * invitation with the shoot — and a hall's example does not show them
+ * anything, so they get their own.
+ */
+export const EXAMPLE_STUDIO = {
+  name: "Atelier Nordlicht",
+  /** Subdomain label: nordlicht.davet.de. */
+  slug: "nordlicht",
+  website: "https://www.atelier-nordlicht.de",
+  phone: "+49 40 5550188",
+  monogram: "AN",
+} as const;

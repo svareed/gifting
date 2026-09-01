@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import {
-  Cormorant_Garamond, Cinzel, Playfair_Display, EB_Garamond,
+  Cormorant_Garamond, Cinzel, Playfair_Display, EB_Garamond, Italiana,
   Jost, Outfit, Amiri,
 } from "next/font/google";
 import { PRODUCT_NAME, SITE_URL } from "@/lib/config";
@@ -33,6 +33,10 @@ const ebGaramond = EB_Garamond({
   subsets: ["latin"], display: "swap", preload: false,
   weight: ["400", "500"], variable: "--f-ebgaramond",
 });
+const italiana = Italiana({
+  subsets: ["latin"], display: "swap", preload: false,
+  weight: ["400"], variable: "--f-italiana",
+});
 const jost = Jost({
   subsets: ["latin"], display: "swap", preload: false,
   weight: ["300", "400", "500"], variable: "--f-jost",
@@ -46,7 +50,7 @@ const amiri = Amiri({
   weight: ["400", "700"], variable: "--f-amiri",
 });
 
-const FONTS = [cormorant, cinzel, playfair, ebGaramond, jost, outfit, amiri]
+const FONTS = [cormorant, cinzel, playfair, ebGaramond, italiana, jost, outfit, amiri]
   .map((f) => f.variable)
   .join(" ");
 

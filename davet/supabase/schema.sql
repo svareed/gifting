@@ -36,10 +36,12 @@ create table public.invites (
   status          text not null default 'draft'  check (status in ('draft','published')),
   -- False while the address tracks the couple's names; set on manual edit.
   slug_locked     boolean not null default false,
-  tradition       text not null default 'islamic' check (tradition in ('islamic','christian')),
+  tradition       text not null default 'islamic' check (tradition in ('islamic','christian','secular')),
+  -- du/Sie, sen/siz. Affects only the words guests read.
+  address_form    text not null default 'informal' check (address_form in ('informal','formal')),
   locale          text not null default 'de'     check (locale in ('en','de','tr')),
   theme           text not null default 'ivory-gold',
-  opener          text not null default 'veil'   check (opener in ('veil','foil','envelope','direct')),
+  opener          text not null default 'veil'   check (opener in ('veil','foil','envelope','direct','tor')),
   timezone        text not null default 'Europe/Berlin',
   partner_a_name  text not null default '',
   partner_b_name  text not null default '',

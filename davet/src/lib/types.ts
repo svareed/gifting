@@ -10,13 +10,35 @@ export const THEME_IDS = [
   "rosewater",
   "sand-terracotta",
   "kasavu",
+  "atelier-blanc",
 ] as const;
 export type ThemeId = (typeof THEME_IDS)[number];
 
-export const OPENER_IDS = ["veil", "foil", "envelope", "direct"] as const;
+/**
+ * How the invitation arrives. "tor" is the cinematic one: two leaves part over
+ * the cover photograph while it settles out of a slow push-in. It needs a
+ * hero image to open onto and falls back to "veil" without one.
+ */
+export const OPENER_IDS = ["veil", "foil", "envelope", "direct", "tor"] as const;
 export type OpenerId = (typeof OPENER_IDS)[number];
 
-export const TRADITIONS = ["islamic", "christian"] as const;
+/**
+ * Chooses the quote library and the quote section's heading. "secular" is not
+ * an absence of tradition — it is the German default: most couples marrying
+ * here want a line from a film or a poem, not scripture, and until this existed
+ * they had to type one in by hand.
+ */
+export const TRADITIONS = ["islamic", "christian", "secular"] as const;
+
+/**
+ * How the invitation speaks to its guests. German and Turkish both force the
+ * choice in every sentence: "Kommst du?" to the couple's friends, "Kommen
+ * Sie?" to an employer or a great-aunt. Getting it wrong is not a tone
+ * problem, it is a rudeness problem, so it is the invitation's decision
+ * rather than the product's.
+ */
+export const ADDRESS_FORMS = ["informal", "formal"] as const;
+export type AddressForm = (typeof ADDRESS_FORMS)[number];
 export type Tradition = (typeof TRADITIONS)[number];
 
 export type SectionKey =
@@ -25,7 +47,11 @@ export type SectionKey =
   | "events"
   | "rsvp"
   | "info"
-  | "music";
+  | "music"
+  /** The studio's or hall's wordmark, set above the cover photograph. */
+  | "brand"
+  /** Orchard blossom drifting over the page. Ambient, opt-in, never load-bearing. */
+  | "blossom";
 
 export type InviteEvent = {
   id: string;
@@ -76,6 +102,8 @@ export type Invite = {
   locale: Locale;
   /** Chooses the verse library and the scripture section's heading. */
   tradition: Tradition;
+  /** du/Sie, sen/siz. Only affects words shown to guests. */
+  addressForm: AddressForm;
   theme: ThemeId;
   opener: OpenerId;
   /** IANA zone, e.g. "Europe/Berlin". Anchors every countdown. */
@@ -83,6 +111,15 @@ export type Invite = {
   partnerAName: string;
   partnerBName: string;
   heroImage: string | null;
+  /** An optional pre-rendered opening for the "tor" gate, and its own
+   *  first frame. Optional so no existing row or seed has to carry it. */
+  openerFilm?: string | null;
+  openerFilmPoster?: string | null;
+  /** A portrait cut of the same opening, for screens taller than they are
+   *  wide. Without it a portrait screen letterboxes the landscape master
+   *  rather than cropping the doors out of frame. */
+  openerFilmMobile?: string | null;
+  openerFilmMobilePoster?: string | null;
   inviteCard: string | null;
   sections: Record<SectionKey, boolean>;
   rsvpDeadline: string | null;

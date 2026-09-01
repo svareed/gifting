@@ -5,6 +5,7 @@ import type {
   Guest, Invite, Locale, Organization, Reminder, Rsvp,
 } from "../types";
 import { EXAMPLE_VENUE } from "../brand";
+import { wallTimeToUtcIso } from "../datetime";
 import type { DueReminder, NewRsvp, Store, SubmissionKind } from "./index";
 
 /**
@@ -59,15 +60,151 @@ function bootstrap(): Data {
       seats: 2, email: "", phone: "", sort: 1 },
   ];
 
+  const studio = studioOrg();
+  const studioInvite = studioExample(studio.id);
+
   return {
-    orgs: new Map([[org.id, org]]),
-    members: [{ orgId: org.id, userId: DEMO_OWNER }],
-    invites: new Map([[invite.id, invite]]),
-    guests,
+    orgs: new Map([[org.id, org], [studio.id, studio]]),
+    // Rosenhof stays first: ensureOrg returns the first membership it finds,
+    // and the dashboard has always opened on the hall.
+    members: [
+      { orgId: org.id, userId: DEMO_OWNER },
+      { orgId: studio.id, userId: DEMO_OWNER },
+    ],
+    invites: new Map([[invite.id, invite], [studioInvite.id, studioInvite]]),
+    guests: [...guests, ...studioGuests(studioInvite.id)],
     reminders: [],
     rsvps: [],
     submissions: [],
   };
+}
+
+/* --- The studio example ---------------------------------------------------
+ * The same product aimed at the other half of its market. A hall sells a room,
+ * so its example is ornamented and centred on the ceremony; a photographer
+ * sells a way of seeing, so hers is black and white, has no ornament at all,
+ * and quotes Casablanca where the hall's quotes a sura. Both are seeded so
+ * either can be shown without anyone having to imagine the difference.
+ */
+
+const TZ = "Europe/Berlin";
+
+/**
+ * The studio this demo is branded for. Deliberately NOT in brand.ts: that
+ * file's placeholder ships to every real user, and its own rule is that seed
+ * data must not carry a real company's name. This is one prospect's pitch,
+ * so it lives with the demo data and is swapped per prospect.
+ *
+ * PLACEHOLDER — replace `website` and `phone` with the studio's real details
+ * before sending this link to anyone.
+ */
+const PITCH_STUDIO = {
+  name: "Vicioso Studios",
+  slug: "vicioso",
+  website: "https://www.viciosostudios.de",
+  phone: "+49 40 5550188",
+} as const;
+
+function studioOrg(): Organization {
+  return {
+    id: "demo-studio",
+    name: PITCH_STUDIO.name,
+    slug: PITCH_STUDIO.slug,
+    logoUrl: "",
+    website: PITCH_STUDIO.website,
+    phone: PITCH_STUDIO.phone,
+    plan: "profi",
+    createdAt: new Date().toISOString(),
+  };
+}
+
+function studioExample(orgId: string): Invite {
+  const iid = "demo-studio-invite";
+  const inv = seedInvite({
+    id: iid, ownerId: DEMO_OWNER, locale: "de",
+    tradition: "secular", timezone: TZ, orgId,
+  });
+  // A fixed date rather than a rolling one: this example is the pitch, and the
+  // pitch names a day. The countdown therefore runs out on 15.12.2026 and the
+  // example reads as a past wedding after that — move the year when it does.
+  const year = 2026;
+  const at = (wall: string) => wallTimeToUtcIso(`${year}-${wall}`, TZ);
+
+  inv.slug = "max-und-lena";
+  inv.status = "published";
+  inv.theme = "atelier-blanc";
+  inv.opener = "tor";
+  inv.partnerAName = "Max";
+  inv.partnerBName = "Lena";
+  inv.heroImage = "/beispiel/titel.jpg";
+  inv.inviteCard = "/beispiel/moment.webp";
+  // The gate is a pre-rendered clip rather than the CSS door. The poster is
+  // the film's own first frame, so starting playback changes nothing on
+  // screen. Cut in media/opener; see docs/opener-film.md.
+  inv.openerFilm = "/beispiel/tor.mp4";
+  inv.openerFilmPoster = "/beispiel/tor-poster.jpg";
+  inv.openerFilmMobile = "/beispiel/tor-mobile.mp4";
+  inv.openerFilmMobilePoster = "/beispiel/tor-mobile-poster.jpg";
+  // brand: the studio's wordmark above the photograph and on the frame — the
+  // whole reason a supplier pays for this rather than sending a PDF.
+  inv.sections = { ...inv.sections, info: true, music: false, brand: true, blossom: true };
+  inv.rsvpDeadline = `${year}-11-15`;
+  inv.organizerName = PITCH_STUDIO.name;
+  inv.organizerUrl = PITCH_STUDIO.website;
+  inv.organizerPhone = PITCH_STUDIO.phone;
+
+  inv.infoWeather =
+    "Mitte Dezember an der Elbe: kalt und oft windig — Mantel, Schal und warme Schuhe "
+    + "für den Weg zwischen den Häusern.";
+  inv.infoDress =
+    "Festlich, gern in gedämpften Tönen. Drinnen ist es warm, draußen nicht — "
+    + "etwas zum Überziehen für den Übergang.";
+  inv.infoParking =
+    "Auf dem Gut gibt es Parkplätze. Ab 17:30 Uhr fährt ein Shuttle zum Elbspeicher und später zurück.";
+
+  inv.families = [
+    { id: `${iid}-f1`, side: "a", personName: "Max",
+      parents: "Sohn von Andrea und Thomas Berger", grandparents: "" },
+    { id: `${iid}-f2`, side: "b", personName: "Lena",
+      parents: "Tochter von Petra und Michael Hoffmann", grandparents: "" },
+  ];
+
+  inv.events = [
+    {
+      id: `${iid}-e1`, sort: 0, presetKey: "freie-trauung", customName: null,
+      venueName: "Gut Hohenholz", venueAddress: "Ahrensburg bei Hamburg",
+      mapsUrl: "", startsAt: at("12-15T13:30"),
+      note: "Trauung in der Remise, anschließend Sektempfang",
+    },
+    {
+      id: `${iid}-e2`, sort: 1, presetKey: "reception", customName: null,
+      venueName: "Elbspeicher Neumühlen", venueAddress: "Neumühlen, Hamburg",
+      mapsUrl: "", startsAt: at("12-15T18:30"),
+      note: "Dinner, Reden und Tanz",
+    },
+    // The studio's own slot, printed where every guest will read it. This is
+    // the line that tells a photographer the product was built with her in mind.
+    {
+      id: `${iid}-e3`, sort: 2, presetKey: null,
+      customName: "Paarshooting zur blauen Stunde",
+      venueName: "Elbstrand Övelgönne", venueAddress: "Hamburg-Othmarschen",
+      mapsUrl: "", startsAt: at("12-15T16:15"),
+      note: "Wir sind eine Stunde weg — tanzt bitte weiter",
+    },
+  ];
+
+  return inv;
+}
+
+function studioGuests(inviteId: string): Guest[] {
+  return [
+    { id: "sg1", inviteId, token: "schneider4m", household: "Familie Schneider",
+      seats: 4, email: "", phone: "", sort: 0 },
+    { id: "sg2", inviteId, token: "krueger2v", household: "Familie Krüger",
+      seats: 2, email: "", phone: "", sort: 1 },
+    { id: "sg3", inviteId, token: "jonas2b", household: "Jonas und Mareike",
+      seats: 2, email: "", phone: "", sort: 2 },
+  ];
 }
 
 function data(): Data {

@@ -30,7 +30,7 @@ export default async function Landing() {
         <p className="b-missing" style={{ marginTop: "1.5rem" }}>{m.landing.demo}</p>
       )}
 
-      <h2 style={{ marginTop: "4rem" }}>{m.landing.stylesHeading}</h2>
+      <h2 style={{ marginTop: "4rem" }}>{m.landing.stylesHeading.replace("{n}", String(THEME_LIST.length))}</h2>
       <p className="lede">{m.landing.stylesLede}</p>
 
       <div className="showcase">

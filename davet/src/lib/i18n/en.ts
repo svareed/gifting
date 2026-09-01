@@ -1,10 +1,11 @@
 export const en = {
   // Invitation chrome
-  nav: { home: "Home", couple: "Couple", events: "Events", info: "Info" },
+  nav: { home: "Home", couple: "Couple", events: "Events", info: "Info", quote: "Words", rsvp: "Reply", sections: "Sections of this invitation" },
   opener: {
     preparing: "Preparing your invitation",
     open: "Open Invitation",
     tapToOpen: "Tap to open",
+    dragToOpen: "Drag apart, or tap",
     scratch: "Scratch the foil to uncover the day",
     revealed: "Swipe up to continue",
   },
@@ -12,9 +13,19 @@ export const en = {
   countdown: { days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds" },
   families: { heading: "Together With Their Families", groom: "The Groom", bride: "The Bride" },
   verses: {
-    heading: { islamic: "Words From The Qur'an", christian: "Words From Scripture" },
-    source: { islamic: "Qur'an", christian: "Bible" },
-    sub: "On love, companionship and mercy",
+    heading: {
+      islamic: "Words From The Qur'an",
+      christian: "Words From Scripture",
+      secular: "Words For The Day",
+    },
+    source: { islamic: "Qur'an", christian: "Bible", secular: "Literature & film" },
+    // Keyed by tradition: a line from Casablanca is not about mercy, and a
+    // subtitle that contradicts what sits under it reads as a mistake.
+    sub: {
+      islamic: "On love, companionship and mercy",
+      christian: "On love, companionship and mercy",
+      secular: "On seeing, and on staying",
+    },
   },
   events: {
     heading: "Wedding Events",
@@ -25,6 +36,7 @@ export const en = {
   rsvp: {
     heading: "Kindly RSVP",
     respondBy: "Please respond by",
+    willYouCome: "Will you be there?",
     yourName: "Your Name",
     attending: "Joyfully attending",
     notAttending: "Regretfully, no",
@@ -37,10 +49,53 @@ export const en = {
     seatsHint: "{n} seats are held for you.",
     privacy: "Your name and reply are shared only with the couple, and deleted after the wedding.",
   },
-  organizer: { hostedAt: "Held at", call: "Call" },
+  organizer: { hostedAt: "An invitation from", call: "Call" },
   info: { heading: "Things to Know", weather: "Weather", dress: "Dress Code", parking: "Parking" },
-  footer: { withLove: "With love & du'a" },
+  footer: {
+    withLove: {
+      islamic: "With love & du'a",
+      christian: "With love & God's blessing",
+      secular: "With love, and with joy",
+    },
+  },
   music: { play: "Play music", pause: "Pause music" },
+  // German weddings still send paper, so printing is a first-class action
+  // rather than something left to the browser menu.
+  actions: { print: "Print invitation" },
+  /**
+   * Overrides applied when an invitation is set to formal address. English
+   * has no du/Sie, so these differ only in register — which is exactly what a
+   * formal English invitation does.
+   */
+  formal: {
+    opener: {
+      preparing: "Preparing your invitation",
+      tapToOpen: "Tap to open",
+      scratch: "Scratch the foil to uncover the day",
+      revealed: "Swipe up to continue",
+    },
+    events: { sub: "We would be honoured by your presence" },
+    rsvp: {
+      respondBy: "Kindly respond by",
+      yourName: "Your name",
+      willYouCome: "Will you be attending?",
+      attending: "Delighted to attend",
+      notAttending: "Regrettably unable",
+      guests: "Guests (including yourself)",
+      message: "A note for the couple (optional)",
+      thanks: "Thank you — your reply has reached the couple.",
+      seatsHint: "{n} seats are held for you.",
+      privacy: "Your name and reply are shared only with the couple, and deleted after the wedding.",
+    },
+  },
+  legal: {
+    imprint: "Legal notice",
+    privacy: "Privacy",
+    updated: "Last updated",
+    backHome: "Back to the start",
+    placeholderWarning:
+      "This page still contains placeholders in square brackets. Fill in the operator details before sending any invitation link.",
+  },
 
   // Builder
   ui: {
@@ -59,6 +114,7 @@ export const en = {
       "rosewater":       { name: "Rosewater",         blurb: "Blush ground, botanical line-work, soft contrast." },
       "sand-terracotta": { name: "Sand & Terracotta", blurb: "Warm earth, contemporary, restrained." },
       "kasavu":          { name: "Kasavu",            blurb: "Off-white cloth with a gold border, Kerala by way of the loom." },
+      "atelier-blanc":   { name: "Atelier Blanc",     blurb: "Plaster white, ink instead of gold, no ornament at all." },
     },
   },
   landing: {
@@ -68,7 +124,7 @@ export const en = {
     start: "Create an invitation",
     example: "See an example",
     demo: "Demo mode: no database configured, so nothing you make here survives a restart. Add Supabase credentials to persist.",
-    stylesHeading: "Eight styles",
+    stylesHeading: "{n} styles",
     stylesLede: "Each one changes the palette, the type and the ornament — never the words.",
   },
   login: {
@@ -198,6 +254,11 @@ export const en = {
       addEvent: "Add event",
       addFamily: "Add family",
       addVerse: "Add your own verse",
+      showBrand: "Show my mark above the photograph",
+      showBlossom: "Let orchard blossom drift over the page",
+      addressForm: "How the invitation addresses guests",
+      addressInformal: "Informally",
+      addressFormal: "Formally",
       verseText: "The words",
       verseRef: "Source (optional)",
       verseOriginal: "Original script (optional)",

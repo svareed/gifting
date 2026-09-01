@@ -4,7 +4,7 @@ import { z } from "zod";
 import { store } from "@/lib/db";
 import { currentOwner } from "@/lib/auth";
 import { isSlugAvailableShape, suggestSlug } from "@/lib/slug";
-import { LOCALES, OPENER_IDS, THEME_IDS, TRADITIONS } from "@/lib/types";
+import { ADDRESS_FORMS, LOCALES, OPENER_IDS, THEME_IDS, TRADITIONS } from "@/lib/types";
 
 const Event = z.object({
   id: z.string(), sort: z.number().int(),
@@ -33,6 +33,7 @@ const Patch = z.object({
   status: z.enum(["draft", "published"]).optional(),
   locale: z.enum(LOCALES).optional(),
   tradition: z.enum(TRADITIONS).optional(),
+  addressForm: z.enum(ADDRESS_FORMS).optional(),
   theme: z.enum(THEME_IDS).optional(),
   opener: z.enum(OPENER_IDS).optional(),
   timezone: z.string().max(64).optional(),

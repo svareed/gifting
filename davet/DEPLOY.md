@@ -18,16 +18,22 @@ never expose it to the browser, and never give it a `NEXT_PUBLIC_` name.
 
 ## 2. Push to GitHub
 
-The repository is initialised and committed already, with no remote.
+The remote already exists — `origin` is `https://github.com/svareed/gifting.git`
+— so this is a push, not a setup:
 
-    git remote add origin git@github.com:<you>/davet.git
-    git push -u origin main
+    git push origin main
+
+**The app is not at the repository root.** The repository is `gifting/` and the
+Next app is the `davet/` directory inside it. That single fact decides step 3.
 
 ## 3. Import on Vercel
 
 1. vercel.com → Add New → Project → import the repository.
-2. Framework preset is detected as Next.js. Leave the build settings alone.
-3. Add environment variables before the first deploy:
+2. **Set Root Directory to `davet`.** Vercel offers this on the import screen
+   and again under Settings → General. Skip it and the build fails immediately
+   with "No package.json found" — there is none at the repository root.
+3. Framework preset is then detected as Next.js. Leave the build settings alone.
+4. Add environment variables before the first deploy:
 
    | Name | Value |
    |---|---|
@@ -40,7 +46,15 @@ The repository is initialised and committed already, with no remote.
    `NEXT_PUBLIC_SITE_URL` is not needed: share links derive from Vercel's own
    production URL. Set it only when you attach a custom domain.
 
-4. Deploy. You get `https://<project>.vercel.app`.
+   **To put the demo up without Supabase at all**, set
+   `ALLOW_DEMO_IN_PRODUCTION=1` instead of the three Supabase variables and
+   leave the rest. The app otherwise refuses to boot in production on the demo
+   store, by design: that store lives in process memory, so every serverless
+   instance gets its own copy and an RSVP submitted against one is invisible to
+   the next. Fine for showing `/max-und-lena` to a client; not fine for anyone
+   real replying to an invitation.
+
+5. Deploy. You get `https://<project>.vercel.app`.
 
 ## 4. Point Supabase auth back at the deployment
 
@@ -54,6 +68,9 @@ Skip this and magic-link sign-in sends people to localhost.
 ## 5. Check it
 
 - `/` loads and shows eight themes.
+- `/max-und-lena` opens: the gate plays its 3.4s film and hands over to the
+  cover. Check it on a phone as well as a laptop — the two get different cuts
+  (`tor-mobile.mp4` and `tor.mp4`), chosen client-side by viewport aspect.
 - `/login` sends a magic link that returns you to `/dashboard`.
 - Create an invitation, publish it, open it in a private window.
 - Submit an RSVP as a guest; confirm it appears under Responses.
